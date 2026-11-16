@@ -2,7 +2,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 10000;
+const HOST = '0.0.0.0';
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -21,15 +22,14 @@ const server = http.createServer((req, res) => {
   let relativePath = cleanUrl === '/' ? 'index.html' : cleanUrl.replace(/^\/+/, '');
   let filePath = path.join(__dirname, decodeURIComponent(relativePath));
 
-  // Security check to prevent path traversal
+  // Security check: prevent directory traversal
   if (!filePath.startsWith(__dirname)) {
-    res.writeHead(403);
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
     return res.end('Access Denied');
   }
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      // Fallback to index.html for SPA routing
       filePath = path.join(__dirname, 'index.html');
     }
 
@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
     fs.readFile(filePath, (readErr, content) => {
       if (readErr) {
         res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end(`Internal Server Error`);
+        res.end('Internal Server Error');
       } else {
         res.writeHead(200, {
           'Content-Type': contentType,
@@ -51,7 +51,6 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`AI Exam Master server listening on port ${PORT}`);
-  console.log(`Access locally at http://localhost:${PORT}/`);
+server.listen(PORT, HOST, () => {
+  console.log(`AI Exam Master listening on http://${HOST}:${PORT}`);
 });
