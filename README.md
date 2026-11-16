@@ -2,12 +2,35 @@
 
 An interactive, responsive, zero-dependency offline web application designed to prepare for and master Artificial Intelligence exams based on University curriculum slides.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/dadmohammad2005-spec/AI_exam)
+
 ---
 
-## 🚀 Quick Start
+## 🌐 Deploy to Render.com (1-Click or Manual)
 
-1. **Direct Browser Launch**: Double-click [`Launch_AI_Exam_Software.bat`](./Launch_AI_Exam_Software.bat) or open [`index.html`](./index.html) in any modern web browser (Chrome, Edge, Firefox, Safari).
-2. **GitHub Pages Ready**: Since the main entry file is named `index.html`, this repository can be hosted instantly with GitHub Pages under **Settings > Pages > Deploy from Branch (`main`)**.
+### Option 1: 1-Click Automated Deployment
+Click the button above or visit:
+👉 **[https://render.com/deploy?repo=https://github.com/dadmohammad2005-spec/AI_exam](https://render.com/deploy?repo=https://github.com/dadmohammad2005-spec/AI_exam)**
+
+Render will automatically read the included `render.yaml` Blueprint and configure your free static site or web service instantly!
+
+### Option 2: Manual Setup on Render Dashboard
+1. Go to **[dashboard.render.com](https://dashboard.render.com/)** and click **New + > Static Site**.
+2. Connect your GitHub account and select repository: **`dadmohammad2005-spec/AI_exam`** (or paste `https://github.com/dadmohammad2005-spec/AI_exam`).
+3. Set the following fields:
+   - **Name**: `ai-exam-master`
+   - **Branch**: `main`
+   - **Build Command**: *(leave blank or `echo "Ready"`)*
+   - **Publish Directory**: `.`
+4. Click **Create Static Site**. Your application will be live in ~30 seconds with a free `*.onrender.com` URL!
+
+---
+
+## 🚀 Local & Alternative Hosting
+
+1. **Direct Browser Launch**: Double-click [`Launch_AI_Exam_Software.bat`](./Launch_AI_Exam_Software.bat) or open [`index.html`](./index.html) in any web browser.
+2. **Local Node.js Server**: Run `npm start` or `node server.js` to serve locally on `http://localhost:3000/`.
+3. **GitHub Pages**: Go to **Settings > Pages** in this repository, select branch **`main`**, folder **`/(root)`**, and click **Save**.
 
 ---
 
@@ -54,6 +77,7 @@ An interactive, responsive, zero-dependency offline web application designed to 
 
 - **HTML5 & CSS3**: Pure modern CSS with CSS variables, responsive grid/flexbox layouts, custom themes, and print media queries.
 - **Vanilla JavaScript (ES6+)**: Zero external dependencies or npm packages required. 100% offline capable.
+- **Node.js**: Native HTTP server implementation in `server.js` (zero dependencies).
 - **Web Audio API**: Synthesized procedural audio feedback for interactive learning.
 
 ---

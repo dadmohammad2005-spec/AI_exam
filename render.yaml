@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: ai-exam-master
+    runtime: static
+    buildCommand: echo "Building AI Exam Master..."
+    staticPublishPath: .
+    branch: main

@@ -1,0 +1,13 @@
+{
+  "name": "ai-exam-master",
+  "version": "1.0.0",
+  "description": "AI Exam Master - Interactive Prep Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Ready'"
+  },
+  "keywords": ["ai", "exam", "education", "mcqs"],
+  "author": "Dad Mohammad",
+  "license": "MIT"
+}
