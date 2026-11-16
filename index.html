@@ -1,0 +1,4124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Exam Master - Complete Slide Prep & MCQ Simulator</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --accent-light: rgba(56, 189, 248, 0.15);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #475569;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --radius: 12px;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f5f9;
+      --accent: #0284c7;
+      --accent-hover: #0369a1;
+      --accent-light: rgba(2, 132, 199, 0.1);
+      --success: #059669;
+      --success-bg: rgba(5, 150, 105, 0.12);
+      --danger: #dc2626;
+      --danger-bg: rgba(220, 38, 38, 0.12);
+      --warning: #d97706;
+      --warning-bg: rgba(217, 119, 6, 0.12);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.25s, color 0.25s;
+      line-height: 1.5;
+    }
+
+    header {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: white;
+      font-weight: 800;
+      font-size: 1.25rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-tertiary);
+      padding: 0.3rem;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .icon-btn {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      border-radius: 8px;
+      padding: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* Subheader banner */
+    .exam-alert-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.15));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .exam-alert-banner .left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--danger);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+      }
+    }
+
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Grids */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Filters bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .chip:hover {
+      color: var(--text-main);
+      border-color: var(--accent);
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 260px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+      color: var(--text-main);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* MCQ Question Card */
+    .mcq-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .mcq-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .mcq-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mcq-tags {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .tag-badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-week {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .badge-diff-easy {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    .badge-diff-med {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+
+    .badge-diff-hard {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    .mcq-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .option-btn {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      text-align: left;
+      color: var(--text-main);
+      font-size: 0.925rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      transform: translateX(3px);
+    }
+
+    .option-letter {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      color: var(--text-muted);
+    }
+
+    .option-btn.selected-correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: #ffffff !important;
+    }
+
+    .option-btn.selected-correct .option-letter {
+      background: var(--success);
+      color: #ffffff;
+      border-color: var(--success);
+    }
+
+    .option-btn.selected-wrong {
+      background: var(--danger-bg) !important;
+      border-color: var(--danger) !important;
+      color: #ffffff !important;
+    }
+
+    .option-btn.selected-wrong .option-letter {
+      background: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger);
+    }
+
+    .option-btn.reveal-correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      border-style: dashed;
+    }
+
+    .mcq-explanation {
+      display: none;
+      background: var(--bg-tertiary);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      animation: fadeIn 0.2s;
+    }
+
+    .mcq-explanation.show {
+      display: block;
+    }
+
+    .explanation-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .explanation-source {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Flashcard View */
+    .flashcard-container {
+      max-width: 650px;
+      margin: 2rem auto;
+      perspective: 1000px;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 340px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      background: var(--bg-secondary);
+    }
+
+    .card-front {
+      border-color: var(--accent);
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      border-color: var(--success);
+      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    }
+
+    .card-hint-pill {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+    }
+
+    .card-flip-prompt {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Exam Simulator View */
+    .sim-header {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .sim-timer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--warning);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sim-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+
+    .sim-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .sim-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+      max-height: 120px;
+      overflow-y: auto;
+      padding: 0.5rem;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+    }
+
+    .palette-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .palette-btn.current {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .palette-btn.answered {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .palette-btn.flagged {
+      background: var(--warning);
+      color: #fff;
+      border-color: var(--warning);
+    }
+
+    /* Study Notes / Slide Summary */
+    .note-accordion {
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg-secondary);
+    }
+
+    .note-header {
+      padding: 1.25rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-secondary);
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: background 0.15s;
+    }
+
+    .note-header:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .note-content {
+      display: none;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg-primary);
+      line-height: 1.7;
+    }
+
+    .note-content.open {
+      display: block;
+    }
+
+    .note-content h3 {
+      color: var(--accent);
+      margin: 1.25rem 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .note-content h4 {
+      color: var(--text-main);
+      margin: 1rem 0 0.4rem 0;
+      font-size: 0.95rem;
+    }
+
+    .note-content ul, .note-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .note-content li {
+      margin-bottom: 0.35rem;
+    }
+
+    .exam-trap-box {
+      background: var(--danger-bg);
+      border-left: 4px solid var(--danger);
+      padding: 0.85rem 1.2rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .exam-trap-box strong {
+      color: #f87171;
+    }
+
+    .tip-box {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 0.85rem 1.2rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .tip-box strong {
+      color: var(--accent);
+    }
+
+    /* Comparison tables */
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.875rem;
+    }
+
+    .custom-table th, .custom-table td {
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+
+    .custom-table th {
+      background: var(--bg-tertiary);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .custom-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .btn-outline:hover {
+      color: var(--text-main);
+      border-color: var(--text-main);
+    }
+
+    /* Score Report Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      position: relative;
+    }
+
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: conic-gradient(var(--success) calc(var(--percent, 0) * 1%), var(--bg-tertiary) 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem auto;
+      position: relative;
+    }
+
+    .score-inner {
+      width: 104px;
+      height: 104px;
+      background: var(--bg-secondary);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .score-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">AI EXAM</div>
+      <div class="logo-text">
+        <h1>AI Exam Master <span style="font-size:0.75rem; background:var(--accent-light); color:var(--accent); padding:2px 8px; border-radius:12px;">Complete 7 Slide Decks Edition</span></h1>
+        <p>Interactive Practice, Flashcards & Slide Syllabus Exam Prep</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-btn active" onclick="switchTab('practice')">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        MCQ Practice (<span id="total-mcq-count">0</span>)
+      </button>
+      <button class="nav-btn" onclick="switchTab('simulator')">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+        Exam Simulator
+      </button>
+      <button class="nav-btn" onclick="switchTab('flashcards')">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+        Flashcards (<span id="total-flashcard-count">0</span>)
+      </button>
+      <button class="nav-btn" onclick="switchTab('notes')">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Slide Super Notes
+      </button>
+      <button class="nav-btn" onclick="switchTab('interactive')">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        Interactive Lab
+      </button>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <button class="icon-btn" onclick="toggleAudio()" title="Sound Effects">
+        <span id="sound-icon">🔊</span>
+      </button>
+      <button class="icon-btn" onclick="window.print()" title="Print Study Guide">
+        🖨️
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Exam Banner Alert -->
+    <div class="exam-alert-banner">
+      <div class="left">
+        <div class="pulse-dot"></div>
+        <div>
+          <strong style="color:var(--text-main); font-size:1rem;">Your Artificial Intelligence Paper is TODAY!</strong>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin:0;">
+            Target: Master all 7 Weeks (Definitions, Generative/Agentic AI, 4 Agent Types, 6 Environments, PEAS, Graphs/BFS/DFS & 5 KR Types).
+          </p>
+        </div>
+      </div>
+      <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-primary" onclick="startFastMockExam()">🚀 Start 25-Question Speed Exam</button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 1. MCQ PRACTICE VIEW -->
+    <!-- ========================================== -->
+    <section id="view-practice" class="view-section active">
+      <div class="filter-bar">
+        <div class="filter-chips" id="week-filters">
+          <div class="chip active" onclick="filterByWeek('All')">All Topics (<span id="all-count">0</span>)</div>
+          <div class="chip" onclick="filterByWeek('Week 1')">W1: Intro & History</div>
+          <div class="chip" onclick="filterByWeek('Week 2')">W2: Gen vs Agentic & ML</div>
+          <div class="chip" onclick="filterByWeek('Week 3')">W3: 4 Agent Types</div>
+          <div class="chip" onclick="filterByWeek('Week 5')">W5: 6 Environments</div>
+          <div class="chip" onclick="filterByWeek('Week 6 & 6.1')">W6: PEAS & Search</div>
+          <div class="chip" onclick="filterByWeek('Week 7')">W7: Knowledge Rep</div>
+          <div class="chip" onclick="filterByBookmarked()" style="border-color:var(--warning); color:var(--warning);">⭐ Saved (<span id="saved-count">0</span>)</div>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" id="search-mcq" placeholder="Search questions, concepts, terms..." oninput="handleSearch()">
+        </div>
+      </div>
+
+      <!-- Live score summary bar -->
+      <div style="background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:0.75rem 1.25rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
+        <div>
+          <span>Showing: <strong id="displayed-mcq-count" style="color:var(--accent);">0</strong> questions</span>
+          <span style="margin: 0 0.5rem; color:var(--border);">|</span>
+          <span>Practiced: <strong id="practiced-count" style="color:var(--success);">0</strong></span>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn btn-outline" style="padding:0.25rem 0.6rem; font-size:0.75rem;" onclick="resetPracticeProgress()">🔄 Reset Practice Answers</button>
+        </div>
+      </div>
+
+      <!-- Question List Container -->
+      <div id="mcq-list-container">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2. EXAM SIMULATOR VIEW -->
+    <!-- ========================================== -->
+    <section id="view-simulator" class="view-section">
+      <div class="sim-header">
+        <div>
+          <h2 style="font-size:1.3rem; font-weight:800; color:var(--text-main);">AI Paper Mock Simulator</h2>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Timed test simulating your actual university exam paper.</p>
+        </div>
+        <div class="sim-timer">
+          <span>⏱️</span>
+          <span id="exam-timer-display">25:00</span>
+        </div>
+        <div>
+          <button class="btn btn-primary" id="btn-submit-exam" onclick="submitExam()">Finish & Grade Exam</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="sim-progress-bar">
+        <div class="sim-progress-fill" id="sim-progress-fill"></div>
+      </div>
+
+      <!-- Question Jump Palette -->
+      <div style="margin-top:1rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">QUESTION PALETTE:</span>
+        <span style="font-size:0.75rem; color:var(--text-muted);"><span style="color:var(--accent);">●</span> Answered | <span style="color:var(--warning);">●</span> Flagged</span>
+      </div>
+      <div class="sim-palette" id="sim-palette">
+        <!-- Palette numbers dynamically injected -->
+      </div>
+
+      <!-- Active Exam Question Card -->
+      <div id="sim-question-box">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+        <button class="btn btn-secondary" onclick="prevExamQuestion()">⬅️ Previous</button>
+        <button class="btn btn-outline" onclick="toggleFlagCurrentExamQuestion()">🚩 Flag for Review</button>
+        <button class="btn btn-primary" onclick="nextExamQuestion()">Next ➡️</button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. FLASHCARDS VIEW -->
+    <!-- ========================================== -->
+    <section id="view-flashcards" class="view-section">
+      <div class="card" style="text-align:center; max-width:750px; margin:0 auto 1.5rem auto;">
+        <h2 style="color:var(--accent); font-size:1.4rem; font-weight:800;">Rapid Recall Flashcards</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">
+          Click or press <strong>Space</strong> to flip the card. Use <strong>Left / Right</strong> arrows to navigate.
+        </p>
+
+        <div style="margin-top:1rem; display:flex; justify-content:center; gap:0.5rem;" id="flashcard-category-chips">
+          <div class="chip active" onclick="filterFlashcards('All')">All (<span id="fc-all-count">0</span>)</div>
+          <div class="chip" onclick="filterFlashcards('Agent Types')">4 Agent Types</div>
+          <div class="chip" onclick="filterFlashcards('Environments')">6 Environments</div>
+          <div class="chip" onclick="filterFlashcards('PEAS')">PEAS</div>
+          <div class="chip" onclick="filterFlashcards('Search')">Search & Graphs</div>
+          <div class="chip" onclick="filterFlashcards('Knowledge')">Knowledge Rep</div>
+        </div>
+      </div>
+
+      <div class="flashcard-container">
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+          <div class="card-face card-front">
+            <span class="card-hint-pill" id="fc-category">AI Foundations</span>
+            <div style="font-size:1.35rem; font-weight:700; color:var(--text-main); margin-bottom:1rem;" id="fc-front">
+              What is an Agent?
+            </div>
+            <div class="card-flip-prompt">🔄 Click anywhere or press Space to see Answer</div>
+          </div>
+          <div class="card-face card-back">
+            <span class="card-hint-pill" style="background:var(--success-bg); color:var(--success);" id="fc-back-category">Answer</span>
+            <div style="font-size:1.1rem; line-height:1.6; color:var(--text-main);" id="fc-back">
+              An entity that perceives its environment through sensors and acts upon that environment through actuators. Formula: Agent = Architecture + Program.
+            </div>
+            <div style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted); font-style:italic;" id="fc-slide-ref">
+              Week 3 & Week 6.1
+            </div>
+            <div class="card-flip-prompt">🔄 Click to flip back</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+          <button class="btn btn-secondary" onclick="prevCard()">⬅️ Previous</button>
+          <span style="font-size:0.9rem; font-weight:700; color:var(--text-muted);">
+            Card <span id="fc-index">1</span> of <span id="fc-total">50</span>
+          </span>
+          <button class="btn btn-primary" onclick="nextCard()">Next ➡️</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4. SLIDE SUPER NOTES VIEW -->
+    <!-- ========================================== -->
+    <section id="view-notes" class="view-section">
+      <div class="card">
+        <h2 style="font-size:1.4rem; font-weight:800; color:var(--accent); margin-bottom:0.5rem;">Comprehensive Slide Super Notes & Cheat Sheets</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">
+          Carefully distilled from all 7 course slide decks (Week 1, 2, 3, 5, 6, 6.1, 7). Expand each section for high-yield revision.
+        </p>
+      </div>
+
+      <!-- Accordion Week 1 -->
+      <div class="note-accordion">
+        <div class="note-header" onclick="toggleAccordion(this)">
+          <span>📘 Week 1: Introduction to Artificial Intelligence & History</span>
+          <span>▼</span>
+        </div>
+        <div class="note-content">
+          <h3>1. Four Historical Perspectives of AI</h3>
+          <p>AI definitions vary along two dimensions: <strong>Thought processes/reasoning vs. Behaviour</strong> and <strong>Human-like vs. Rational</strong>.</p>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Perspective</th>
+                <th>Focus</th>
+                <th>Author & Definition in Slides</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Thinking Humanly</strong></td>
+                <td>Cognitive Modeling</td>
+                <td><strong>Haugeland (1985):</strong> "The exciting new effort to make computers think... machines with minds, in the full and literal sense."</td>
+              </tr>
+              <tr>
+                <td><strong>Acting Humanly</strong></td>
+                <td>Turing Test Approach</td>
+                <td><strong>Kurzweil (1990):</strong> "The art of creating machines that perform functions that require intelligence when performed by people."</td>
+              </tr>
+              <tr>
+                <td><strong>Thinking Rationally</strong></td>
+                <td>Laws of Thought / Logic</td>
+                <td><strong>Winston (1992):</strong> "The study of the computations that make it possible to perceive, reason, and act."</td>
+              </tr>
+              <tr>
+                <td><strong>Acting Rationally</strong></td>
+                <td>Rational Agent Approach</td>
+                <td><strong>Poole et al. (1998):</strong> "Computational Intelligence is the study of the design of intelligent agents."</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="exam-trap-box">
+            <strong>⚠️ EXAM TRAP:</strong> Remember who said what! Haugeland = Thinking Humanly ("machines with minds"); Kurzweil = Acting Humanly ("functions that require intelligence"); Winston = Thinking Rationally ("computations that perceive, reason, act"); Poole = Acting Rationally ("design of intelligent agents").
+          </div>
+
+          <h3>2. Alan Turing & The Turing Test (1950)</h3>
+          <ul>
+            <li><strong>The Imitation Game:</strong> A human interrogator communicates over a text-only channel with one human and one machine. The machine tries to fool the judge.</li>
+            <li><strong>1950 Prediction:</strong> By the year 2000, a machine might have a <strong>30% chance of fooling a lay person for 5 minutes</strong>.</li>
+            <li><strong>4 Capabilities for Standard Turing Test:</strong>
+              <ol>
+                <li><strong>NLP:</strong> Communicate successfully in human language.</li>
+                <li><strong>Knowledge Representation:</strong> Store what it knows or hears.</li>
+                <li><strong>Automated Reasoning:</strong> Use stored information to answer questions and draw conclusions.</li>
+                <li><strong>Machine Learning:</strong> Adapt to new circumstances and detect patterns.</li>
+              </ol>
+            </li>
+            <li><strong>Total Turing Test</strong> adds physical interactions: <strong>Computer Vision</strong> (perceive objects) and <strong>Robotics</strong> (manipulate objects).</li>
+          </ul>
+
+          <h3>3. Key Historic AI Milestones in Slides</h3>
+          <ul>
+            <li><strong>STANLEY (2005):</strong> Robotic driverless car finished 132-mile rough terrain Mojave desert course at 22 mph.</li>
+            <li><strong>WAYMO:</strong> Google self-driving car project ("a new way forward in mobility").</li>
+            <li><strong>Speech Recognition:</strong> United Airlines automated flight booking dialog system.</li>
+            <li><strong>NASA Remote Agent:</strong> First on-board autonomous planning program controlling spacecraft scheduling.</li>
+            <li><strong>PackBot:</strong> Robotic system for hazardous materials, explosive clearance, and locating snipers.</li>
+            <li><strong>Spam Detection:</strong> Classifies over 1 billion messages daily; saves 80% to 90% of user inboxes from spam.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Accordion Week 2 -->
+      <div class="note-accordion">
+        <div class="note-header" onclick="toggleAccordion(this)">
+          <span>📗 Week 2: Intelligence, Generative vs. Agentic AI & Machine Learning</span>
+          <span>▼</span>
+        </div>
+        <div class="note-content">
+          <h3>1. Historical Origin of the Name "AI"</h3>
+          <p>The term <strong>"Artificial Intelligence"</strong> was officially coined at the historic <strong>1956 Dartmouth College workshop</strong> organized by John McCarthy, Marvin Minsky, Nathaniel Rochester, and Claude Shannon.</p>
+
+          <h3>2. Generative AI vs. Agentic AI (Direct Slide Comparison)</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>Generative AI</th>
+                <th>Agentic AI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Core Definition</strong></td>
+                <td>Creates new content (text, images, audio, video) based on prompts.</td>
+                <td>Autonomous, goal-driven AI that plans, takes multi-step actions, and uses tools.</td>
+              </tr>
+              <tr>
+                <td><strong>Operation Style</strong></td>
+                <td>Reactive, single-turn prompt response.</td>
+                <td>Proactive, loop-based, iteratively assesses environment and corrects mistakes.</td>
+              </tr>
+              <tr>
+                <td><strong>Slide Real-Life Scenario (Teaching)</strong></td>
+                <td><strong>Creates lecture slides</strong> or writes essays.</td>
+                <td><strong>Designs course + delivers teaching + evaluates student progress.</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>3. Weak AI vs. Strong AI</h3>
+          <ul>
+            <li><strong>Weak AI (Narrow AI):</strong> The assertion that machines could act <em>as if</em> they were intelligent. Examples: ChatGPT, Siri, Alexa, Recommender Systems, Self-driving cars.</li>
+            <li><strong>Strong AI (AGI):</strong> Machines that actually think and possess genuine human-level minds/consciousness.</li>
+          </ul>
+
+          <h3>4. Machine Learning Fundamentals</h3>
+          <ul>
+            <li><strong>Supervised Learning:</strong> Trained on labeled datasets (every training sample has a known ground truth output).</li>
+            <li><strong>Unsupervised Learning:</strong> Trained on unlabeled data to discover hidden patterns or clusters.</li>
+            <li><strong>Artificial Neural Networks (ANN):</strong> Input layer &rarr; Hidden layers &rarr; Output layer. Forward propagation makes predictions; backpropagation updates weights to minimize loss.</li>
+            <li><strong>Convolutional Neural Networks (CNN):</strong> Specialized deep learning architectures designed for grid-like data (images, object detection).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Accordion Week 3 -->
+      <div class="note-accordion">
+        <div class="note-header" onclick="toggleAccordion(this)">
+          <span>📙 Week 3: Intelligent Agents & The 4 Agent Architectures</span>
+          <span>▼</span>
+        </div>
+        <div class="note-content">
+          <h3>1. Agent Definition & Fundamental Formula</h3>
+          <ul>
+            <li>An <strong>Agent</strong> is anything that perceives its environment through <strong>sensors</strong> and acts upon it through <strong>actuators</strong>.</li>
+            <li><strong>Agent Function:</strong> Abstract mathematical mapping from percept histories to actions: <code>f: P* &rarr; A</code>.</li>
+            <li><strong>Agent Program:</strong> Concrete implementation running on an architecture: <code>Agent = Architecture + Program</code>.</li>
+          </ul>
+
+          <h3>2. The 4 Agent Architectures (MUST MASTER FOR EXAM!)</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Agent Type</th>
+                <th>How It Works</th>
+                <th>Key Features & Examples</th>
+                <th>Major Limitations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Simple Reflex Agent</strong></td>
+                <td>Condition-Action rules (IF condition THEN action).</td>
+                <td>Responds ONLY to current percept. No memory/history. <em>Example: IVR system, basic thermostat.</em></td>
+                <td>Fails in partially observable worlds; infinite loops; zero adaptability.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Model-based Reflex Agent</strong></td>
+                <td>Maintains an <strong>internal state</strong> to track unobservable world.</td>
+                <td>4-stage cycle: <strong>Sense &rarr; Model &rarr; Reason &rarr; Act</strong>. Knows how world evolves and how actions affect world. <em>Example: Amazon Bedrock.</em></td>
+                <td>Computationally costly to maintain models; real world is hard to model accurately.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Goal-based Agent</strong></td>
+                <td>Combines state with explicit <strong>Goal</strong> descriptions.</td>
+                <td>5 steps: <strong>Perception &rarr; Reasoning &rarr; Action &rarr; Evaluation &rarr; Goal Completion</strong>. Uses search and planning algorithms.</td>
+                <td>Cannot differentiate between two equally valid paths to the same goal (no preference metric).</td>
+              </tr>
+              <tr>
+                <td><strong>4. Utility-based Agent</strong></td>
+                <td>Evaluates states using a <strong>Utility Function</strong> (happiness/desirability score).</td>
+                <td>Chooses action with highest expected utility. Manages trade-offs (e.g. speed vs safety, cost vs reliability).</td>
+                <td>Complex utility functions; computationally demanding.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="exam-trap-box">
+            <strong>⚠️ EXAM QUESTION ALERT:</strong> If asked which agent chooses actions based on "trade-offs between conflicting goals or degree of desirability", the answer is ALWAYS <strong>Utility-based Agent</strong>!
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion Week 5 -->
+      <div class="note-accordion">
+        <div class="note-header" onclick="toggleAccordion(this)">
+          <span>📕 Week 5: The 6 Environment Classifications</span>
+          <span>▼</span>
+        </div>
+        <div class="note-content">
+          <p>Russell & Norvig and your slides identify 6 distinct dimensions of task environments:</p>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>Type 1</th>
+                <th>Type 2</th>
+                <th>Exam Slide Examples</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Observability</strong></td>
+                <td><strong>Fully Observable:</strong> Complete state visible at any time through sensors.</td>
+                <td><strong>Partially Observable:</strong> Incomplete, noisy, or hidden data.</td>
+                <td>Chess is Fully Observable. Taxi driving & Vacuum with only local sensor are Partially Observable.</td>
+              </tr>
+              <tr>
+                <td><strong>Determinism</strong></td>
+                <td><strong>Deterministic:</strong> Next state is 100% determined by current state and action.</td>
+                <td><strong>Stochastic:</strong> Randomness or unpredictable factors present.</td>
+                <td>Vacuum world & Chess are Deterministic. Taxi driving is Stochastic (traffic is unpredictable).</td>
+              </tr>
+              <tr>
+                <td><strong>Episodic vs Sequential</strong></td>
+                <td><strong>Episodic:</strong> Atomic independent episodes; current action does NOT affect future episodes.</td>
+                <td><strong>Sequential:</strong> Current decision affects all future states and actions.</td>
+                <td>Mail sorting & Image classification are Episodic. Chess and Taxi driving are Sequential.</td>
+              </tr>
+              <tr>
+                <td><strong>Dynamics</strong></td>
+                <td><strong>Static:</strong> World does NOT change while agent is deliberating.</td>
+                <td><strong>Dynamic:</strong> World continuously changes while agent is thinking.</td>
+                <td>Crossword puzzles are Static. Taxi driving & football are Dynamic. (Chess with clock = Semi-dynamic).</td>
+              </tr>
+              <tr>
+                <td><strong>Continuity</strong></td>
+                <td><strong>Discrete:</strong> Finite, distinctly separate states, actions, and time steps.</td>
+                <td><strong>Continuous:</strong> Smoothly flowing spectrum of states and actions.</td>
+                <td>Chess & 8-puzzle are Discrete. Taxi driving & drone navigation are Continuous.</td>
+              </tr>
+              <tr>
+                <td><strong>Agent Count</strong></td>
+                <td><strong>Single-Agent:</strong> Agent acts entirely alone.</td>
+                <td><strong>Multi-Agent:</strong> Multiple agents interact (competitive or cooperative).</td>
+                <td>Crossword is Single-Agent. Chess is Multi-Agent (two competitive agents).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Accordion Week 6 & 6.1 -->
+      <div class="note-accordion">
+        <div class="note-header" onclick="toggleAccordion(this)">
+          <span>📔 Week 6 & 6.1: PEAS Framework, Graph Theory & Search (BFS vs. DFS)</span>
+          <span>▼</span>
+        </div>
+        <div class="note-content">
+          <h3>1. PEAS Framework Examples from Slides</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>Performance Measure (P)</th>
+                <th>Environment (E)</th>
+                <th>Actuators (A)</th>
+                <th>Sensors (S)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Automated Taxi</strong></td>
+                <td>Safe, fast, legal, comfortable trip, maximize profits</td>
+                <td>Roads, traffic, pedestrians, weather, passengers</td>
+                <td>Steering wheel, accelerator, brake, signal, horn, display</td>
+                <td>Cameras, sonar, lidar, GPS, speedometer, engine sensors</td>
+              </tr>
+              <tr>
+                <td><strong>Medical Diagnosis</strong></td>
+                <td>Healthy patient, minimize costs/pain, avoid malpractice</td>
+                <td>Patient, hospital, medical staff</td>
+                <td>Display questions, tests, diagnoses, treatments, referrals</td>
+                <td>Keyboard (symptoms, history), temperature, BP, weight sensor</td>
+              </tr>
+              <tr>
+                <td><strong>Interactive English Tutor</strong></td>
+                <td>Maximize student's test score & engagement</td>
+                <td>Set of students, testing system</td>
+                <td>Display exercises, corrections, feedback</td>
+                <td>Keyboard, microphone</td>
+              </tr>
+              <tr>
+                <td><strong>Vacuum Cleaner</strong></td>
+                <td>Cleanliness, energy efficiency, noise minimization</td>
+                <td>Rooms A and B, dirt distribution</td>
+                <td>Suck dirt, move Left, move Right, No-op</td>
+                <td>Dirt sensor, location sensor</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>2. Graph Theory: In-Degree & Out-Degree Calculation (Direct Slide Problem)</h3>
+          <p><strong>Definition:</strong> In a directed graph:</p>
+          <ul>
+            <li><code>Out-degree(x)</code> = Number of directed edges leaving vertex x.</li>
+            <li><code>In-degree(x)</code> = Number of directed edges entering vertex x.</li>
+          </ul>
+          <div class="tip-box">
+            <strong>📐 Exact Slide Example (Slide 18-22):</strong><br>
+            Given vertices: <code>V = {u, v, w}</code> and directed edges: <code>E = {(u, w), (u, v), (v, w)}</code><br>
+            • For <strong>u</strong>: Edges starting from u are (u,w), (u,v) &rarr; <strong>Out = 2</strong>. Edges ending at u: none &rarr; <strong>In = 0</strong>.<br>
+            • For <strong>v</strong>: Edges starting from v: (v,w) &rarr; <strong>Out = 1</strong>. Edges ending at v: (u,v) &rarr; <strong>In = 1</strong>.<br>
+            • For <strong>w</strong>: Edges starting from w: none &rarr; <strong>Out = 0</strong>. Edges ending at w: (u,w), (v,w) &rarr; <strong>In = 2</strong>.
+          </div>
+
+          <h3>3. Trees Properties</h3>
+          <ul>
+            <li>A tree is a connected, acyclic graph.</li>
+            <li>For any tree with <strong>N vertices</strong>, there are exactly <strong>N - 1 edges</strong>!</li>
+          </ul>
+
+          <h3>4. Five Components of a Well-Defined Search Problem</h3>
+          <ol>
+            <li><strong>Initial State:</strong> Starting configuration.</li>
+            <li><strong>Actions:</strong> Possible moves available.</li>
+            <li><strong>Transition Model:</strong> Description of what each action does.</li>
+            <li><strong>Goal Test:</strong> Checks if current state satisfies the objective.</li>
+            <li><strong>Path Cost:</strong> Sum of step costs along the path.</li>
+          </ol>
+
+          <h3>5. Uninformed Search: BFS vs. DFS Comparison</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Criterion</th>
+                <th>Breadth-First Search (BFS)</th>
+                <th>Depth-First Search (DFS)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Data Structure</strong></td>
+                <td>FIFO Queue (shallowest node first)</td>
+                <td>LIFO Stack (deepest node first)</td>
+              </tr>
+              <tr>
+                <td><strong>Completeness</strong></td>
+                <td><strong>Yes</strong> (if branching factor b is finite)</td>
+                <td><strong>No</strong> (fails in infinite paths or loops)</td>
+              </tr>
+              <tr>
+                <td><strong>Optimality</strong></td>
+                <td><strong>Yes</strong> (if all step costs are equal)</td>
+                <td><strong>No</strong> (can return deeper sub-optimal solution)</td>
+              </tr>
+              <tr>
+                <td><strong>Time Complexity</strong></td>
+                <td>O(b^d)</td>
+                <td>O(b^m) (m = maximum depth)</td>
+              </tr>
+              <tr>
+                <td><strong>Space Complexity</strong></td>
+                <td><strong>O(b^d)</strong> (EXPONENTIAL - Huge Memory Bottleneck!)</td>
+                <td><strong>O(bm)</strong> (LINEAR - Modest space is its strength!)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Accordion Week 7 -->
+      <div class="note-accordion">
+        <div class="note-header" onclick="toggleAccordion(this)">
+          <span>📓 Week 7: Knowledge Representation and Reasoning (KRR)</span>
+          <span>▼</span>
+        </div>
+        <div class="note-content">
+          <h3>1. What is Knowledge Representation (KR)?</h3>
+          <p>KR is a branch of AI focusing on how machines store and use knowledge about the real world to reason, learn, and solve problems smartly. It enables systems to combine prior experience with input data to display intelligent behavior.</p>
+
+          <h3>2. The 5 Types of Knowledge</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Core Meaning</th>
+                <th>Slide Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Declarative</strong></td>
+                <td>Facts and concepts; answers "WHAT" something is.</td>
+                <td><em>"Paris is the capital of France."</em></td>
+              </tr>
+              <tr>
+                <td><strong>2. Procedural</strong></td>
+                <td>HOW to perform a task or execute a procedure.</td>
+                <td><em>Steps to sort numbers using an algorithm.</em></td>
+              </tr>
+              <tr>
+                <td><strong>3. Meta-Knowledge</strong></td>
+                <td>Knowledge about other knowledge; how to select rules.</td>
+                <td><em>Knowing that a certain rule works better for solving calculus problems.</em></td>
+              </tr>
+              <tr>
+                <td><strong>4. Heuristic</strong></td>
+                <td>Experience-based rules of thumb used by experts.</td>
+                <td><em>A doctor using 20 years of clinical experience to guess a possible illness.</em></td>
+              </tr>
+              <tr>
+                <td><strong>5. Structural</strong></td>
+                <td>Relationships, taxonomies, and hierarchies between concepts.</td>
+                <td><em>"A car is a type of vehicle."</em></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>3. Four Knowledge Representation Techniques</h3>
+          <ul>
+            <li><strong>1. Logical Representation:</strong> Uses formal logic with precise <strong>Syntax</strong> (rules for constructing sentences) and <strong>Semantics</strong> (meaning and truth value).</li>
+            <li><strong>2. Semantic Networks:</strong> Graph representation with <strong>Nodes</strong> (objects/concepts) and directed <strong>Arcs</strong> (relations). Key relations: <code>IS-A</code> (inheritance, e.g. Cat IS-A Mammal) and <code>Kind-of</code>.</li>
+            <li><strong>3. Frame Representation:</strong> Structured data format with <strong>Slots</strong> (attributes) and <strong>Values</strong>. Resembles classes and objects in OOP; widely used in NLP and Computer Vision (e.g. Frame for Book with slots Title, Author, Year, Pages).</li>
+            <li><strong>4. Production Rules:</strong> <code>IF condition THEN action</code>. Consists of 3 components:
+              <ol>
+                <li><strong>Set of rules:</strong> Condition-action specifications.</li>
+                <li><strong>Working memory:</strong> Current state of problem facts.</li>
+                <li><strong>Recognize-Act cycle:</strong> Checking conditions against memory and firing the chosen rule.</li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 5. INTERACTIVE LAB VIEW -->
+    <!-- ========================================== -->
+    <section id="view-interactive" class="view-section">
+      <div class="card">
+        <h2 style="color:var(--accent); font-weight:800; margin-bottom:0.5rem;">Interactive Exam Calculations & Concept Checkers</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Test your direct mastery of calculations and tables that frequently appear in exams.</p>
+      </div>
+
+      <!-- Graph Degree Visualizer -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📐 Slide Graph Degree Solver (Week 6, Slides 18-22)</div>
+        </div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">
+          Given Directed Graph with Vertices <code>V = {u, v, w}</code> and Edges <code>E = {(u, w), (u, v), (v, w)}</code>:
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1.5rem;">
+          <div style="background:var(--bg-tertiary); padding:1rem; border-radius:8px; border-left:4px solid var(--accent);">
+            <strong>Vertex u:</strong>
+            <p style="font-size:0.85rem; margin-top:0.35rem;">Outgoing edges: (u,w), (u,v)</p>
+            <p style="font-size:0.85rem;">Incoming edges: None</p>
+            <div style="margin-top:0.5rem; font-weight:700; color:var(--success);">Out-degree = 2 | In-degree = 0</div>
+          </div>
+          <div style="background:var(--bg-tertiary); padding:1rem; border-radius:8px; border-left:4px solid var(--warning);">
+            <strong>Vertex v:</strong>
+            <p style="font-size:0.85rem; margin-top:0.35rem;">Outgoing edges: (v,w)</p>
+            <p style="font-size:0.85rem;">Incoming edges: (u,v)</p>
+            <div style="margin-top:0.5rem; font-weight:700; color:var(--success);">Out-degree = 1 | In-degree = 1</div>
+          </div>
+          <div style="background:var(--bg-tertiary); padding:1rem; border-radius:8px; border-left:4px solid var(--danger);">
+            <strong>Vertex w:</strong>
+            <p style="font-size:0.85rem; margin-top:0.35rem;">Outgoing edges: None</p>
+            <p style="font-size:0.85rem;">Incoming edges: (u,w), (v,w)</p>
+            <div style="margin-top:0.5rem; font-weight:700; color:var(--success);">Out-degree = 0 | In-degree = 2</div>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <strong>Key Rule:</strong> Total Sum of In-Degrees = Total Sum of Out-Degrees = Total Number of Edges (|E| = 3)!
+        </div>
+      </div>
+
+      <!-- Environment Classification Self-Tester -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🧪 Environment Dimension Self-Quiz</div>
+        </div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Select a task below to test whether you can correctly identify all 6 environment properties:</p>
+
+        <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
+          <button class="btn btn-secondary active" onclick="loadEnvQuiz('taxi')">Automated Taxi</button>
+          <button class="btn btn-secondary" onclick="loadEnvQuiz('chess')">Chess with Clock</button>
+          <button class="btn btn-secondary" onclick="loadEnvQuiz('mail')">Mail Sorting</button>
+          <button class="btn btn-secondary" onclick="loadEnvQuiz('crossword')">Crossword Puzzle</button>
+        </div>
+
+        <div id="env-quiz-card" style="background:var(--bg-tertiary); padding:1.25rem; border-radius:8px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Score Modal -->
+  <div class="modal-overlay" id="score-modal">
+    <div class="modal-card">
+      <h2 style="font-size:1.6rem; font-weight:800; color:var(--text-main);">Exam Simulation Complete!</h2>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;" id="modal-exam-subtitle">Here is your performance summary for today's paper.</p>
+
+      <div class="score-circle" id="modal-score-circle" style="--percent: 75;">
+        <div class="score-inner">
+          <span class="score-number" id="modal-score-number">85%</span>
+          <span class="score-label" id="modal-score-fraction">21 / 25</span>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-tertiary); padding:1rem; border-radius:8px; margin-bottom:1.5rem; text-align:left; font-size:0.9rem;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+          <span>Status:</span> <strong id="modal-exam-status" style="color:var(--success);">PASSED (Ready for Exam)</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+          <span>Time Taken:</span> <strong id="modal-exam-time">14m 20s</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>Accuracy:</span> <strong id="modal-exam-acc">84%</strong>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:0.75rem; justify-content:center;">
+        <button class="btn btn-secondary" onclick="closeScoreModal()">Review Answers</button>
+        <button class="btn btn-primary" onclick="startFastMockExam()">Take Another Mock Test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT DATA AND ENGINE -->
+  <script>
+    // Embedded MCQs and Flashcards
+    const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "Which of the following definitions corresponds to 'Systems that think like humans' according to Haugeland (1985)?",
+    "options": [
+      "The exciting new effort to make computers think... machines with minds, in the full and literal sense",
+      "The art of creating machines that perform functions that require intelligence when performed by people",
+      "The study of the computations that make it possible to perceive, reason, and act",
+      "Computational Intelligence is the study of the design of intelligent agents"
+    ],
+    "answer": 0,
+    "explanation": "Haugeland (1985) defined AI as 'The exciting new effort to make computers think... machines with minds, in the full and literal sense', which fits under the 'Thinking Humanly' category.",
+    "slide_ref": "Week 1, Slide 16",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 2,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "Kurzweil (1990) defined AI as 'The art of creating machines that perform functions that require intelligence when performed by people'. Which perspective does this represent?",
+    "options": [
+      "Systems that think rationally",
+      "Systems that act like humans",
+      "Systems that think like humans",
+      "Systems that act rationally"
+    ],
+    "answer": 1,
+    "explanation": "Kurzweil's definition focuses on behavior ('acting like humans') rather than internal thought processes.",
+    "slide_ref": "Week 1, Slide 16",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 3,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "The four historical perspectives of AI vary along which two primary dimensions?",
+    "options": [
+      "Hardware speed and software complexity",
+      "Thought processes/reasoning vs. behaviour, and human-centered vs. rationality",
+      "Supervised vs. unsupervised learning",
+      "Discrete states vs. continuous states"
+    ],
+    "answer": 1,
+    "explanation": "AI definitions vary along two dimensions: (1) Thought processes and reasoning vs. Behaviour, and (2) Measuring success against human performance vs. an ideal concept of intelligence (rationality).",
+    "slide_ref": "Week 1, Slide 18",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 4,
+    "week": "Week 1",
+    "topic": "Milestones in AI",
+    "question": "In 2005, which driverless robotic car finished a 132-mile rough terrain course across the Mojave desert at 22 mph?",
+    "options": [
+      "Deep Blue",
+      "STANLEY",
+      "PackBot",
+      "WAYMO"
+    ],
+    "answer": 1,
+    "explanation": "STANLEY was the robotic car developed by Stanford that won the DARPA Grand Challenge in 2005 across the Mojave desert.",
+    "slide_ref": "Week 1, Slide 6",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 5,
+    "week": "Week 1",
+    "topic": "Milestones in AI",
+    "question": "What was the primary function of NASA's 'Remote Agent' program?",
+    "options": [
+      "To classify spam messages for astronaut emails",
+      "To serve as an on-board autonomous planning and scheduling program for a spacecraft",
+      "To drive an autonomous rover across the Mojave desert",
+      "To defeat human grandmasters at chess"
+    ],
+    "answer": 1,
+    "explanation": "NASA's Remote Agent program was the first on-board autonomous planning program to control the scheduling of operations for a spacecraft.",
+    "slide_ref": "Week 1, Slide 9",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 6,
+    "week": "Week 1",
+    "topic": "Milestones in AI",
+    "question": "Which robotic system was deployed to handle hazardous materials, clear explosives, and identify sniper locations?",
+    "options": [
+      "STANLEY",
+      "PackBot",
+      "Deep Blue",
+      "Waymo"
+    ],
+    "answer": 1,
+    "explanation": "PackBot is a military and emergency robot specifically used to handle hazardous materials, defuse explosives, and locate snipers.",
+    "slide_ref": "Week 1, Slide 10",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 7,
+    "week": "Week 1",
+    "topic": "Turing Test",
+    "question": "In the Turing Test (1950), Alan Turing predicted that by the year 2000, a machine might have what probability of fooling a lay person for 5 minutes?",
+    "options": [
+      "10%",
+      "30%",
+      "50%",
+      "90%"
+    ],
+    "answer": 1,
+    "explanation": "Turing predicted that by 2000, a machine might have a 30% chance of fooling a lay interrogator for 5 minutes.",
+    "slide_ref": "Week 1, Slide 20",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 8,
+    "week": "Week 1",
+    "topic": "Turing Test",
+    "question": "Which of the following capabilities is NOT required to pass the standard (text-only) Turing Test?",
+    "options": [
+      "Natural Language Processing (NLP)",
+      "Automated Reasoning",
+      "Physical Robotics and Computer Vision",
+      "Knowledge Representation"
+    ],
+    "answer": 2,
+    "explanation": "The standard Turing Test is conducted via a text-only channel. Computer Vision and Robotics are only required for the 'Total Turing Test'.",
+    "slide_ref": "Week 1, Slide 21-22",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 9,
+    "week": "Week 1",
+    "topic": "Turing Test Criticism",
+    "question": "Why do Russell and Norvig argue that the Turing Test is not necessarily the right ultimate goal for AI?",
+    "options": [
+      "Because computers will never have enough processing power",
+      "Because aeronautical engineering does not define its goal as making machines fly so like pigeons that they fool other pigeons",
+      "Because Alan Turing was not a computer scientist",
+      "Because humans are entirely rational in all domains"
+    ],
+    "answer": 1,
+    "explanation": "Russell & Norvig point out that aeronautical engineers do not design airplanes to fool pigeons; similarly, AI should focus on rational principles of intelligent action rather than imitating human quirks.",
+    "slide_ref": "Week 1, Slide 23",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 10,
+    "week": "Week 1",
+    "topic": "Cognitive Science & Logic",
+    "question": "Cognitive Science combines computer models from AI with experimental techniques from which field?",
+    "options": [
+      "Sociology",
+      "Psychology",
+      "Mechanical Engineering",
+      "Quantum Mechanics"
+    ],
+    "answer": 1,
+    "explanation": "Cognitive Science brings together computer models from AI and experimental techniques from Psychology to construct testable theories of the human mind.",
+    "slide_ref": "Week 1, Slide 24",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 11,
+    "week": "Week 1",
+    "topic": "Laws of Thought",
+    "question": "Who was one of the first philosophers to codify 'right thinking' into formal logic using syllogisms (e.g., 'Socrates is a man...')?",
+    "options": [
+      "Alan Turing",
+      "Aristotle",
+      "Rene Descartes",
+      "John McCarthy"
+    ],
+    "answer": 1,
+    "explanation": "Aristotle initiated the 'Laws of Thought' approach by attempting to codify right thinking through syllogisms.",
+    "slide_ref": "Week 1, Slide 25",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 12,
+    "week": "Week 1",
+    "topic": "Real World Applications",
+    "question": "According to the slides, what percentage of daily emails could comprise spam if not filtered out by AI machine learning algorithms?",
+    "options": [
+      "10% to 20%",
+      "30% to 40%",
+      "50% to 60%",
+      "80% to 90%"
+    ],
+    "answer": 3,
+    "explanation": "The slides note that spam could comprise 80% or 90% of all messages for many users if learning algorithms did not classify them away.",
+    "slide_ref": "Week 1, Slide 10",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 13,
+    "week": "Week 2",
+    "topic": "History of AI",
+    "question": "In what year and at which historic workshop was the field of 'Artificial Intelligence' officially named?",
+    "options": [
+      "1950 at Cambridge",
+      "1956 at Dartmouth College",
+      "1969 at Stanford University",
+      "1997 at IBM Watson Labs"
+    ],
+    "answer": 1,
+    "explanation": "The field of AI was officially christened at the 1956 Dartmouth College summer workshop organized by John McCarthy, Marvin Minsky, Nathaniel Rochester, and Claude Shannon.",
+    "slide_ref": "Week 2, Slide 6",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 14,
+    "week": "Week 2",
+    "topic": "Generative AI vs Agentic AI",
+    "question": "What is the primary operational difference between Generative AI and Agentic AI?",
+    "options": [
+      "Generative AI uses neural networks whereas Agentic AI only uses if-then rules",
+      "Generative AI creates content based on user prompts; Agentic AI is autonomous, goal-oriented, and executes multi-step workflows with tool use",
+      "Agentic AI only produces images while Generative AI only produces text",
+      "Generative AI requires internet connectivity while Agentic AI runs entirely on microcontrollers"
+    ],
+    "answer": 1,
+    "explanation": "Generative AI focuses on content generation from prompts, while Agentic AI pursues goals autonomously through planning, multi-step actions, and environmental feedback.",
+    "slide_ref": "Week 2, Slide 7-8",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 15,
+    "week": "Week 2",
+    "topic": "Generative vs Agentic AI (Teaching Scenario)",
+    "question": "In the slides' teaching scenario comparison, what does Generative AI do versus Agentic AI?",
+    "options": [
+      "Generative AI grades the exam; Agentic AI prints the exam",
+      "Generative AI creates lecture slides; Agentic AI designs the course, delivers it, and evaluates student progress",
+      "Generative AI builds the classroom; Agentic AI pays the teacher",
+      "Both perform identical tasks with no differences"
+    ],
+    "answer": 1,
+    "explanation": "In Slide 9's real-life comparison table, Generative AI 'Creates lecture slides', whereas Agentic AI 'Designs course + teaches + evaluates students'.",
+    "slide_ref": "Week 2, Slide 9",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 16,
+    "week": "Week 2",
+    "topic": "Weak AI vs Strong AI",
+    "question": "What is the definition of 'Weak AI' (Narrow AI)?",
+    "options": [
+      "AI systems with low accuracy and high latency",
+      "The assertion that machines could act as if they were intelligent in specific domains",
+      "Machines that have genuine self-awareness, feelings, and consciousness",
+      "AI systems that only run on obsolete 8-bit computers"
+    ],
+    "answer": 1,
+    "explanation": "Weak AI refers to systems that act as if they were intelligent (e.g. Siri, Alexa, ChatGPT, self-driving cars), whereas Strong AI asserts machines possess real consciousness.",
+    "slide_ref": "Week 2, Slide 10",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 17,
+    "week": "Week 2",
+    "topic": "Rational Agent Approach",
+    "question": "According to the rational agent approach, when is an agent considered rational?",
+    "options": [
+      "When it mimics human behavior exactly, including human mistakes",
+      "When it acts to achieve the best outcome (or best expected outcome), given what it knows",
+      "When it possesses human emotions and empathy",
+      "When it never takes any action that consumes power"
+    ],
+    "answer": 1,
+    "explanation": "A rational agent is one that acts to achieve the best outcome or, when there is uncertainty, the best expected outcome based on its knowledge and percepts.",
+    "slide_ref": "Week 2, Slide 11-12",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 18,
+    "week": "Week 2",
+    "topic": "State of the Art Milestones",
+    "question": "Which historic AI milestone occurred in 1997?",
+    "options": [
+      "STANLEY completed the DARPA desert challenge",
+      "IBM's Deep Blue defeated reigning world chess champion Garry Kasparov",
+      "ChatGPT was launched to the public",
+      "Google WAYMO drove 10 million autonomous miles"
+    ],
+    "answer": 1,
+    "explanation": "In 1997, IBM's Deep Blue defeated Garry Kasparov, marking the first time a computer defeated a reigning world champion in a classical chess match.",
+    "slide_ref": "Week 2, Slide 14",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 19,
+    "week": "Week 2",
+    "topic": "Search Methodologies",
+    "question": "What distinguishes Uninformed (Blind) Search from Informed (Heuristic) Search?",
+    "options": [
+      "Uninformed search searches without any domain knowledge beyond problem definition; informed search uses heuristics to guide the search towards the goal",
+      "Uninformed search always uses neural networks while informed search uses decision trees",
+      "Uninformed search finds solutions faster in all cases",
+      "Informed search never checks the goal state"
+    ],
+    "answer": 0,
+    "explanation": "Uninformed search has no information about how close a state is to the goal, whereas informed search uses heuristic evaluation functions to guide exploration.",
+    "slide_ref": "Week 2, Slide 19-20",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 20,
+    "week": "Week 2",
+    "topic": "Machine Learning",
+    "question": "In Supervised Learning, how is the training data structured?",
+    "options": [
+      "Only input data is provided without any target outputs",
+      "Each training example is paired with an output label (ground truth)",
+      "The model only receives reward signals upon reaching the goal",
+      "The model creates its own labels using unsupervised clustering"
+    ],
+    "answer": 1,
+    "explanation": "Supervised learning involves training a model on labeled data where every training example is explicitly paired with a known target output.",
+    "slide_ref": "Week 2, Slide 22",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 21,
+    "week": "Week 2",
+    "topic": "Neural Networks",
+    "question": "During which phase of an Artificial Neural Network (ANN) does input data pass layer-by-layer to generate predictions?",
+    "options": [
+      "Backpropagation",
+      "Forward Propagation",
+      "Heuristic Evaluation",
+      "Feature Clustering"
+    ],
+    "answer": 1,
+    "explanation": "In Forward Propagation, input signals pass through the input, hidden, and output layers to produce predictions.",
+    "slide_ref": "Week 2, Slide 25",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 22,
+    "week": "Week 2",
+    "topic": "Deep Learning Models",
+    "question": "Which type of deep learning model is specifically designed for processing grid-like data, such as images?",
+    "options": [
+      "Recurrent Neural Network (RNN)",
+      "Convolutional Neural Network (CNN)",
+      "Simple Reflex Agent",
+      "Interactive Voice Response (IVR)"
+    ],
+    "answer": 1,
+    "explanation": "Convolutional Neural Networks (CNNs) are specialized neural architectures designed to process grid-structured data like pixel grids in images.",
+    "slide_ref": "Week 2, Slide 27",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 23,
+    "week": "Week 3",
+    "topic": "Intelligent Agents Definition",
+    "question": "Mathematically, an Agent Function is an abstract mapping from what to what?",
+    "options": [
+      "From actions to sensor voltages: f: A -> S",
+      "From percept histories (sequences) to actions: f: P* -> A",
+      "From neural network weights to classification outputs: f: W -> Y",
+      "From goals to state space graphs: f: G -> S"
+    ],
+    "answer": 1,
+    "explanation": "The agent function is abstractly defined as f: P* -> A, mapping any given percept history (P*) to an action (A).",
+    "slide_ref": "Week 3 & Week 6.1, Slide 5",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 24,
+    "week": "Week 3",
+    "topic": "Agent Equation",
+    "question": "In AI agent architecture, the complete Agent is equal to:",
+    "options": [
+      "Sensors + Actuators",
+      "Architecture + Program",
+      "Hardware + Internet",
+      "Rules + Heuristics"
+    ],
+    "answer": 1,
+    "explanation": "As standard in Russell & Norvig and the slides: Agent = Architecture + Program.",
+    "slide_ref": "Week 3, Slide 14 & Week 6.1",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 25,
+    "week": "Week 3",
+    "topic": "Forms of Agents",
+    "question": "Which of the following is classified as a 'System Agent' in the slides?",
+    "options": [
+      "Chatbot and Email spam filter",
+      "Operating system scheduler and Power grid management system",
+      "Travel agent and Real estate agent",
+      "Self-driving car and Delivery drone"
+    ],
+    "answer": 1,
+    "explanation": "Slide 10 classifies OS schedulers, traffic light control, and power grid management systems as 'System Agents'.",
+    "slide_ref": "Week 3, Slide 10",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 26,
+    "week": "Week 3",
+    "topic": "Simple Reflex Agents",
+    "question": "How does a Simple Reflex Agent make its decisions?",
+    "options": [
+      "By searching ahead into future possible states",
+      "By following pre-defined condition-action rules responding solely to the current percept, ignoring history",
+      "By computing expected utilities across multiple probabilistic paths",
+      "By building a dynamic 3D simulation of the world"
+    ],
+    "answer": 1,
+    "explanation": "Simple reflex agents act purely on 'condition-action rules' matching the immediate current percept without considering past percepts or future effects.",
+    "slide_ref": "Week 3, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 27,
+    "week": "Week 3",
+    "topic": "Simple Reflex Agents",
+    "question": "Which real-world system is cited in the slides as an example of a Simple Reflex Agent?",
+    "options": [
+      "Amazon Bedrock",
+      "Interactive Voice Response (IVR) system",
+      "Deep Blue chess engine",
+      "STANLEY desert vehicle"
+    ],
+    "answer": 1,
+    "explanation": "Slide 16 explicitly cites an 'Interactive Voice Response (IVR) system' as an example of a Simple Reflex Agent.",
+    "slide_ref": "Week 3, Slide 16",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 28,
+    "week": "Week 3",
+    "topic": "Simple Reflex Agents Limitations",
+    "question": "What is a major vulnerability or limitation of Simple Reflex Agents?",
+    "options": [
+      "They require massive GPU clusters to compute basic addition",
+      "They have no internal memory/state, easily get trapped in infinite loops, and fail under partial observability",
+      "They are too slow to provide real-time responses",
+      "They cannot be implemented in software"
+    ],
+    "answer": 1,
+    "explanation": "Because simple reflex agents lack internal state/memory, they fail whenever the environment is partially observable and can easily loop indefinitely.",
+    "slide_ref": "Week 3, Slide 17",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 29,
+    "week": "Week 3",
+    "topic": "Model-based Reflex Agents",
+    "question": "What critical component allows a Model-based Reflex Agent to handle partially observable environments?",
+    "options": [
+      "A pre-trained vision transformer",
+      "An internal state that models how the world evolves and how the agent's actions affect it",
+      "A physical robotic arm",
+      "A utility scoring function"
+    ],
+    "answer": 1,
+    "explanation": "A model-based reflex agent maintains an internal state reflecting aspects of the unobservable world, tracking how the world evolves independently and how its own actions alter it.",
+    "slide_ref": "Week 3, Slide 18",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 30,
+    "week": "Week 3",
+    "topic": "Model-based Reflex Agent Cycle",
+    "question": "What are the four operational stages of a Model-based Reflex Agent listed in Slide 19?",
+    "options": [
+      "Input, Output, Store, Delete",
+      "Sense -> Model -> Reason -> Act",
+      "Perception -> Heuristic -> Search -> Goal",
+      "Forward -> Backward -> Loss -> Gradient"
+    ],
+    "answer": 1,
+    "explanation": "Slide 19 explicitly lists the 4 stages: Sense (perceives state), Model (builds internal world model), Reason (decides action based on model), and Act (executes).",
+    "slide_ref": "Week 3, Slide 19",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 31,
+    "week": "Week 3",
+    "topic": "Model-based Reflex Agents",
+    "question": "Which modern cloud foundation-model service is highlighted in Slide 20 as an example of a cautionary model-based reflex agent?",
+    "options": [
+      "Google Cloud Spanner",
+      "Amazon Bedrock",
+      "Microsoft Azure DevOps",
+      "Salesforce CRM"
+    ],
+    "answer": 1,
+    "explanation": "Slide 20 cites Amazon Bedrock as an example of a system using foundational models to simulate operations, gain insights, and make informed decisions.",
+    "slide_ref": "Week 3, Slide 20",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 32,
+    "week": "Week 3",
+    "topic": "Goal-based Agents",
+    "question": "How does a Goal-based Agent differ from a reflex agent?",
+    "options": [
+      "It does not use sensors",
+      "It combines current state knowledge with explicit goal descriptions and uses search/planning to find paths to that goal",
+      "It only acts when a human presses a physical button",
+      "It always selects the action that consumes the most power"
+    ],
+    "answer": 1,
+    "explanation": "A goal-based agent explicitly incorporates goal information and evaluates future actions using search algorithms to see if they achieve the desired destination.",
+    "slide_ref": "Week 3, Slide 23-24",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 33,
+    "week": "Week 3",
+    "topic": "Goal-based Agents Lifecycle",
+    "question": "What are the 5 sequential steps in the working cycle of a Goal-based Agent (Slide 25)?",
+    "options": [
+      "Initialize -> Train -> Test -> Validate -> Deploy",
+      "Perception -> Reasoning -> Action -> Evaluation -> Goal Completion",
+      "Sense -> Reflex -> Error -> Retry -> Stop",
+      "Compile -> Execute -> Debug -> Optimize -> Halt"
+    ],
+    "answer": 1,
+    "explanation": "Slide 25 lists: Perception -> Reasoning -> Action -> Evaluation -> Goal Completion.",
+    "slide_ref": "Week 3, Slide 25",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 34,
+    "week": "Week 3",
+    "topic": "Utility-based Agents",
+    "question": "When goals are insufficient to distinguish between several valid paths (e.g. trading off safety vs speed), which agent architecture is needed?",
+    "options": [
+      "Simple Reflex Agent",
+      "Model-based Reflex Agent",
+      "Utility-based Agent",
+      "System Agent"
+    ],
+    "answer": 2,
+    "explanation": "Utility-based agents use a utility function mapping states to real numbers to measure how desirable a particular state is, enabling trade-offs between competing goals.",
+    "slide_ref": "Week 3, Slide 27-28",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 35,
+    "week": "Week 5",
+    "topic": "Environment Types",
+    "question": "An environment is 'Fully Observable' if:",
+    "options": [
+      "The agent has 360-degree cameras installed",
+      "The agent's sensors give complete access to the entire state of the environment at any given time point",
+      "The environment never changes over time",
+      "Multiple agents are present in the room"
+    ],
+    "answer": 1,
+    "explanation": "In a fully observable environment, every piece of information required to make a decision is available through the agent's sensors without hidden variables.",
+    "slide_ref": "Week 5, Slide 5",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 36,
+    "week": "Week 5",
+    "topic": "Environment Types",
+    "question": "Why is a vacuum cleaner with only a local dirt sensor considered to be in a 'Partially Observable' environment?",
+    "options": [
+      "Because it cannot clean dust effectively",
+      "Because it cannot sense whether dirt exists in other rooms/squares without traveling there",
+      "Because its battery can drain at any moment",
+      "Because dirt moves continuously"
+    ],
+    "answer": 1,
+    "explanation": "Slide 5 states: 'A vacuum agent with only a local dirt sensor cannot tell whether there is dirt in other squares', making the environment partially observable.",
+    "slide_ref": "Week 5, Slide 5",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 37,
+    "week": "Week 5",
+    "topic": "Deterministic vs Stochastic",
+    "question": "When is an environment classified as 'Deterministic'?",
+    "options": [
+      "When the next state of the environment is completely determined by the current state and the action executed by the agent",
+      "When random dice rolls determine the next state",
+      "When the environment is changing while the agent thinks",
+      "When the agent has unlimited memory"
+    ],
+    "answer": 0,
+    "explanation": "An environment is deterministic if the next state is completely determined by the current state and the agent's chosen action.",
+    "slide_ref": "Week 5, Slide 7",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 38,
+    "week": "Week 5",
+    "topic": "Deterministic vs Stochastic",
+    "question": "According to the slides, why is automated taxi driving considered 'Stochastic'?",
+    "options": [
+      "Because the car engine is electric",
+      "Because one can never predict the behaviour of other traffic and road participants exactly",
+      "Because the taxi driver does not have a map",
+      "Because GPS coordinates are always rounded to whole numbers"
+    ],
+    "answer": 1,
+    "explanation": "Slide 7 notes: 'Taxi driving is clearly stochastic... because one can never predict the behaviour of the traffic exactly.'",
+    "slide_ref": "Week 5, Slide 7",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 39,
+    "week": "Week 5",
+    "topic": "Episodic vs Sequential",
+    "question": "Which of the following tasks is an example of an 'Episodic' environment?",
+    "options": [
+      "Chess",
+      "Automated taxi driving",
+      "Mail sorting / Image classification",
+      "Playing football"
+    ],
+    "answer": 2,
+    "explanation": "In episodic environments, experience is divided into atomic episodes where each episode does not depend on actions taken in previous episodes (e.g. mail sorting, classification).",
+    "slide_ref": "Week 5, Slide 9",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 40,
+    "week": "Week 5",
+    "topic": "Episodic vs Sequential",
+    "question": "Why are Chess and Taxi Driving classified as 'Sequential' environments?",
+    "options": [
+      "Because they are played in sequential order of player ages",
+      "Because the current decision affects all subsequent future decisions and states",
+      "Because they have no goal state",
+      "Because they can only be solved with DFS"
+    ],
+    "answer": 1,
+    "explanation": "In sequential environments, current decisions have long-term consequences that affect all future states and decisions.",
+    "slide_ref": "Week 5, Slide 9",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 41,
+    "week": "Week 5",
+    "topic": "Static vs Dynamic",
+    "question": "An environment is 'Dynamic' for an agent if:",
+    "options": [
+      "The environment can change while the agent is deliberating (thinking)",
+      "The environment has moving colors",
+      "The agent runs on battery power",
+      "The goal changes every 10 minutes"
+    ],
+    "answer": 0,
+    "explanation": "An environment is dynamic if the world keeps changing while the agent is deliberating on an action (e.g. taxi driving, football).",
+    "slide_ref": "Week 5, Slide 11",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 42,
+    "week": "Week 5",
+    "topic": "Static vs Dynamic",
+    "question": "Solving a crossword puzzle is an example of which type of environment?",
+    "options": [
+      "Dynamic",
+      "Static",
+      "Continuous",
+      "Multi-agent"
+    ],
+    "answer": 1,
+    "explanation": "A crossword puzzle is static because the puzzle does not change while the player is thinking about the answer.",
+    "slide_ref": "Week 5, Slide 11",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 43,
+    "week": "Week 5",
+    "topic": "Discrete vs Continuous",
+    "question": "What is the key distinction between Discrete and Continuous environments?",
+    "options": [
+      "Discrete has finite, distinctly separate states and actions; continuous has infinite states/actions flowing smoothly along a spectrum",
+      "Discrete is used only in hardware while continuous is software",
+      "Discrete environments cannot be represented as graphs",
+      "Continuous environments have no sensors"
+    ],
+    "answer": 0,
+    "explanation": "Discrete environments have distinct, separate states and actions (e.g. Chess board squares), whereas continuous environments have smoothly varying continuous states/actions (e.g. speed, angles).",
+    "slide_ref": "Week 5, Slide 13",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 44,
+    "week": "Week 5",
+    "topic": "Single vs Multi-Agent",
+    "question": "Which of the following pairs is correctly matched regarding Single vs Multi-agent environments?",
+    "options": [
+      "Crossword puzzle -> Multi-agent; Chess -> Single agent",
+      "Crossword puzzle -> Single agent; Chess -> Multi-agent (two agents)",
+      "Taxi driving -> Single agent; Sudoku -> Multi-agent",
+      "All games are single agent"
+    ],
+    "answer": 1,
+    "explanation": "Slide 15 explicitly notes: 'Crossword puzzle -> a single agent; Chess -> two-agents (multi-agent)'.",
+    "slide_ref": "Week 5, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 45,
+    "week": "Week 6 & 6.1",
+    "topic": "PEAS Framework",
+    "question": "What does the acronym PEAS stand for in AI agent design?",
+    "options": [
+      "Programs, Execution, Architecture, Software",
+      "Performance measure, Environment, Actuators, Sensors",
+      "Perception, Entity, Action, State",
+      "Planning, Evaluation, Algorithms, Search"
+    ],
+    "answer": 1,
+    "explanation": "PEAS stands for Performance measure, Environment, Actuators, and Sensors - the complete specification of an agent's task environment.",
+    "slide_ref": "Week 6, Slide 3 & Week 6.1, Slide 10",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 46,
+    "week": "Week 6 & 6.1",
+    "topic": "PEAS for Automated Taxi",
+    "question": "For an automated taxi driver, which of the following is an ACTUATOR?",
+    "options": [
+      "Cameras and Sonar",
+      "Steering wheel, accelerator, and brake",
+      "Roads and pedestrians",
+      "Safe, fast, and legal trip"
+    ],
+    "answer": 1,
+    "explanation": "Actuators are the mechanisms used to perform actions: steering, accelerator, brakes, signals, horn, and display.",
+    "slide_ref": "Week 6, Slide 6 & Week 6.1, Slide 11",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 47,
+    "week": "Week 6 & 6.1",
+    "topic": "PEAS for Medical Diagnosis",
+    "question": "In a Medical Diagnostic System, what serves as the SENSORS?",
+    "options": [
+      "Display screen showing prescription",
+      "Keyboard (inputting patient symptoms, history, and test results) and medical sensors (temperature, blood pressure)",
+      "Healthy patient and low cost",
+      "Hospital rooms and doctor staff"
+    ],
+    "answer": 1,
+    "explanation": "Sensors for medical diagnosis are keyboard/input devices for symptoms and medical monitoring instruments (temp, BP, weight).",
+    "slide_ref": "Week 6, Slide 9 & Week 6.1, Slide 12",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 48,
+    "week": "Week 6 & 6.1",
+    "topic": "PEAS for English Tutor",
+    "question": "For an Interactive English Tutor agent, what is the primary PERFORMANCE MEASURE?",
+    "options": [
+      "Microphone and speakers",
+      "Maximize student's score on tests and learning engagement",
+      "Set of registered students",
+      "Displaying correction exercises on screen"
+    ],
+    "answer": 1,
+    "explanation": "Slide 13 (Week 6.1) specifies: 'Performance measure: Maximize student's score on test'.",
+    "slide_ref": "Week 6.1, Slide 13",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 49,
+    "week": "Week 6 & 6.1",
+    "topic": "Graph Degrees Calculation",
+    "question": "In a directed graph, Out-degree(x) and In-degree(x) are defined as:",
+    "options": [
+      "Out-degree is the number of edges entering x; In-degree is edges leaving x",
+      "Out-degree is the number of edges leaving vertex x; In-degree is the number of edges entering vertex x",
+      "Out-degree is total vertices in graph; In-degree is total edges",
+      "Both represent the weight of vertex x"
+    ],
+    "answer": 1,
+    "explanation": "Out-degree is the number of directed edges starting from/leaving x. In-degree is the number of directed edges ending at/entering x.",
+    "slide_ref": "Week 6, Slide 18",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 50,
+    "week": "Week 6 & 6.1",
+    "topic": "Graph Degrees Exact Slide Problem",
+    "question": "Given vertices V = {u, v, w} and directed edges E = {(u, w), (u, v), (v, w)}. What are the Out-degree and In-degree for vertex u?",
+    "options": [
+      "Out-degree = 0, In-degree = 2",
+      "Out-degree = 2, In-degree = 0",
+      "Out-degree = 1, In-degree = 1",
+      "Out-degree = 2, In-degree = 2"
+    ],
+    "answer": 1,
+    "explanation": "Edges starting from u are (u, w) and (u, v) -> Out-degree = 2. Edges ending at u are none -> In-degree = 0.",
+    "slide_ref": "Week 6, Slide 19",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 51,
+    "week": "Week 6 & 6.1",
+    "topic": "Graph Degrees Exact Slide Problem",
+    "question": "In the same graph V = {u, v, w} with directed edges E = {(u, w), (u, v), (v, w)}, what are the degrees for vertex w?",
+    "options": [
+      "Out-degree = 2, In-degree = 0",
+      "Out-degree = 1, In-degree = 1",
+      "Out-degree = 0, In-degree = 2",
+      "Out-degree = 0, In-degree = 0"
+    ],
+    "answer": 2,
+    "explanation": "No edges start from w -> Out-degree = 0. Two edges end at w: (u, w) and (v, w) -> In-degree = 2.",
+    "slide_ref": "Week 6, Slide 21",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 52,
+    "week": "Week 6 & 6.1",
+    "topic": "Graph Degrees Exact Slide Problem",
+    "question": "In the same graph V = {u, v, w} with directed edges E = {(u, w), (u, v), (v, w)}, what are the degrees for vertex v?",
+    "options": [
+      "Out-degree = 1, In-degree = 1",
+      "Out-degree = 2, In-degree = 0",
+      "Out-degree = 0, In-degree = 2",
+      "Out-degree = 2, In-degree = 1"
+    ],
+    "answer": 0,
+    "explanation": "Edges starting from v: (v, w) -> Out-degree = 1. Edges ending at v: (u, v) -> In-degree = 1.",
+    "slide_ref": "Week 6, Slide 20",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 53,
+    "week": "Week 6 & 6.1",
+    "topic": "Tree Properties",
+    "question": "Which of the following is a mandatory property of a Tree graph with N vertices?",
+    "options": [
+      "It must contain at least one directed cycle",
+      "It is connected, acyclic, and contains exactly N - 1 edges",
+      "It must have N * (N - 1) edges",
+      "All vertices must have the same in-degree"
+    ],
+    "answer": 1,
+    "explanation": "Slide 24 states that a tree is an acyclic, connected, hierarchical graph, and for N vertices, there are exactly N - 1 edges.",
+    "slide_ref": "Week 6, Slide 24",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 54,
+    "week": "Week 6 & 6.1",
+    "topic": "Well-Defined Search Problem",
+    "question": "What are the 5 components of a well-defined search problem?",
+    "options": [
+      "P, E, A, S, and Cost",
+      "Initial state, Actions, Transition model, Goal test, and Path cost",
+      "Breadth, Depth, Heuristic, Matrix, Graph",
+      "Sensors, Actuators, CPU, RAM, Disk"
+    ],
+    "answer": 1,
+    "explanation": "Slide 26 lists the 5 formal components: Initial state, Actions, Transition model, Goal test, and Path cost.",
+    "slide_ref": "Week 6, Slide 26",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 55,
+    "week": "Week 6 & 6.1",
+    "topic": "Vacuum World Problem",
+    "question": "In the standard 2-room vacuum cleaner problem (rooms A & B, each either clean or dirty), how many distinct world states exist in the state space?",
+    "options": [
+      "2",
+      "4",
+      "8",
+      "16"
+    ],
+    "answer": 2,
+    "explanation": "There are 2 possible agent locations (A or B) and 2^2 = 4 possible dirt distributions (both clean, both dirty, A dirty, B dirty). Total states = 2 * 4 = 8 states.",
+    "slide_ref": "Week 6, Slide 27-28",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 56,
+    "week": "Week 6 & 6.1",
+    "topic": "Search Evaluation Criteria",
+    "question": "Which evaluation criterion asks: 'Is the algorithm guaranteed to find a solution when there is one'?",
+    "options": [
+      "Optimality",
+      "Completeness",
+      "Time complexity",
+      "Space complexity"
+    ],
+    "answer": 1,
+    "explanation": "Completeness guarantees that the algorithm will always find a solution if at least one exists.",
+    "slide_ref": "Week 6, Slide 32",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 57,
+    "week": "Week 6 & 6.1",
+    "topic": "Breadth-First Search (BFS)",
+    "question": "What data structure is utilized in Breadth-First Search (BFS) to explore nodes?",
+    "options": [
+      "LIFO Stack",
+      "FIFO Queue",
+      "Priority Queue based on heuristics",
+      "Binary Search Tree"
+    ],
+    "answer": 1,
+    "explanation": "BFS expands the shallowest nodes first by enqueuing successor nodes into a FIFO (First-In, First-Out) queue.",
+    "slide_ref": "Week 6, Slide 33-36",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 58,
+    "week": "Week 6 & 6.1",
+    "topic": "BFS Complexity & Limitations",
+    "question": "What is the primary practical bottleneck / drawback of Breadth-First Search (BFS) in large state spaces?",
+    "options": [
+      "It is never optimal",
+      "Its space (memory) complexity O(b^d) grows exponentially, exhausting RAM quickly",
+      "It gets trapped in infinite depth loops",
+      "It cannot be implemented with a queue"
+    ],
+    "answer": 1,
+    "explanation": "Space complexity O(b^d) is the huge bottleneck for BFS. At branching factor b=10 and depth d=10, storing all generated nodes requires terabytes of memory.",
+    "slide_ref": "Week 6, Slide 33-35",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 59,
+    "week": "Week 6 & 6.1",
+    "topic": "Depth-First Search (DFS)",
+    "question": "What is the primary advantage of Depth-First Search (DFS) over BFS?",
+    "options": [
+      "DFS is always complete and optimal",
+      "DFS has modest space complexity: O(bm) memory, which is linear with depth",
+      "DFS checks all nodes at depth 1 before depth 2",
+      "DFS never expands duplicate paths"
+    ],
+    "answer": 1,
+    "explanation": "DFS only needs to store the current path from the root to the leaf plus sibling nodes, requiring linear space O(bm), unlike BFS which requires exponential space.",
+    "slide_ref": "Week 6, Slide 37",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 60,
+    "week": "Week 6 & 6.1",
+    "topic": "Depth-First Search (DFS)",
+    "question": "Why is standard Depth-First Search (DFS) considered incomplete in general state spaces?",
+    "options": [
+      "Because it runs out of memory immediately",
+      "Because it can follow an infinite branch or cycle forever without backtracking to find existing solutions",
+      "Because it cannot use a stack",
+      "Because it only works on undirected graphs"
+    ],
+    "answer": 1,
+    "explanation": "DFS can get stuck pursuing an infinitely deep branch or looping in cyclic state spaces, preventing it from ever finding the goal.",
+    "slide_ref": "Week 6, Slide 37",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 61,
+    "week": "Week 7",
+    "topic": "Knowledge Representation",
+    "question": "What is the primary focus of Knowledge Representation and Reasoning (KRR) in AI?",
+    "options": [
+      "Formatting disk drives for AI software",
+      "How machines store, structure, and use knowledge about the real world to reason, learn, and make intelligent decisions",
+      "Encrypting passwords for secure transmission",
+      "Writing HTML templates for web pages"
+    ],
+    "answer": 1,
+    "explanation": "KRR focuses on enabling computers to store real-world knowledge in a structured way so they can reason, learn from experience, and solve complex problems.",
+    "slide_ref": "Week 7, Slide 2-4",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 62,
+    "week": "Week 7",
+    "topic": "Types of Knowledge",
+    "question": "Which type of knowledge consists of facts, concepts, and answers 'WHAT something is' (e.g., 'Paris is the capital of France')?",
+    "options": [
+      "Procedural Knowledge",
+      "Declarative Knowledge",
+      "Meta Knowledge",
+      "Heuristic Knowledge"
+    ],
+    "answer": 1,
+    "explanation": "Declarative knowledge represents facts, assertions, and static concepts answering 'what' something is.",
+    "slide_ref": "Week 7, Slide 6-7",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 63,
+    "week": "Week 7",
+    "topic": "Types of Knowledge",
+    "question": "Knowledge about HOW to perform a task or solve a problem (e.g., steps to sort numbers using an algorithm) is called:",
+    "options": [
+      "Declarative Knowledge",
+      "Procedural Knowledge",
+      "Structural Knowledge",
+      "Meta Knowledge"
+    ],
+    "answer": 1,
+    "explanation": "Procedural knowledge answers 'how' to perform an action or execute step-by-step procedures.",
+    "slide_ref": "Week 7, Slide 8",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 64,
+    "week": "Week 7",
+    "topic": "Types of Knowledge",
+    "question": "What is 'Meta-Knowledge' in AI?",
+    "options": [
+      "Knowledge generated by Meta/Facebook",
+      "Knowledge about other knowledge or how knowledge is used (e.g., knowing which rule works best to solve a math problem)",
+      "Knowledge stored exclusively on flash drives",
+      "Rules of thumb used by doctors"
+    ],
+    "answer": 1,
+    "explanation": "Meta-knowledge is knowledge about knowledge itself - guiding how knowledge is selected, indexed, and applied.",
+    "slide_ref": "Week 7, Slide 9",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 65,
+    "week": "Week 7",
+    "topic": "Types of Knowledge",
+    "question": "Experience-based rules of thumb used by domain experts (e.g., a doctor guessing a disease based on 20 years of practice) is known as:",
+    "options": [
+      "Declarative Knowledge",
+      "Procedural Knowledge",
+      "Heuristic Knowledge",
+      "Structural Knowledge"
+    ],
+    "answer": 2,
+    "explanation": "Heuristic knowledge represents rules of thumb, educated guesses, and intuitive expertise acquired through hands-on experience.",
+    "slide_ref": "Week 7, Slide 10",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 66,
+    "week": "Week 7",
+    "topic": "Types of Knowledge",
+    "question": "Knowledge that illustrates relationships between concepts (e.g., 'A car is a type of vehicle') is classified as:",
+    "options": [
+      "Structural Knowledge",
+      "Procedural Knowledge",
+      "Meta Knowledge",
+      "Heuristic Knowledge"
+    ],
+    "answer": 0,
+    "explanation": "Structural knowledge describes relationships, categories, hierarchies, and part-whole connections between concepts.",
+    "slide_ref": "Week 7, Slide 11",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 67,
+    "week": "Week 7",
+    "topic": "KR Techniques",
+    "question": "What are the four primary Knowledge Representation techniques presented in Slide 13?",
+    "options": [
+      "CPU, GPU, TPU, RAM",
+      "Logical Representation, Semantic Networks, Frame Representation, and Production Rules",
+      "BFS, DFS, A*, Hill Climbing",
+      "ANN, CNN, RNN, Transformers"
+    ],
+    "answer": 1,
+    "explanation": "Slide 13 lists the four fundamental KR techniques: Logical, Semantic Network, Frame, and Production Rules.",
+    "slide_ref": "Week 7, Slide 13",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 68,
+    "week": "Week 7",
+    "topic": "Logical Representation",
+    "question": "In Logical Representation, what is the distinction between Syntax and Semantics?",
+    "options": [
+      "Syntax defines the rules of writing symbols/sentences; Semantics defines the meaning of the sentences",
+      "Syntax defines the meaning; Semantics defines the computer hardware",
+      "Syntax is used in BFS; Semantics is used in DFS",
+      "They are completely interchangeable terms"
+    ],
+    "answer": 0,
+    "explanation": "Syntax specifies formal grammar rules for symbol strings; Semantics determines the truth value and real-world meaning of those sentences.",
+    "slide_ref": "Week 7, Slide 14",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 69,
+    "week": "Week 7",
+    "topic": "Semantic Networks",
+    "question": "In a Semantic Network, what do the nodes and arcs represent?",
+    "options": [
+      "Nodes represent actions; Arcs represent sensors",
+      "Nodes represent objects or concepts; Arcs represent relationships between them (e.g. IS-A, Kind-of)",
+      "Nodes represent database servers; Arcs represent network cables",
+      "Nodes represent CPU cores; Arcs represent buses"
+    ],
+    "answer": 1,
+    "explanation": "A semantic network is a graph where nodes denote concepts/objects and labeled directed arcs depict relationships (like IS-A inheritance).",
+    "slide_ref": "Week 7, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 70,
+    "week": "Week 7",
+    "topic": "Semantic Networks",
+    "question": "In a Semantic Network, what does the 'IS-A' relation represent?",
+    "options": [
+      "Random association",
+      "Inheritance (e.g., Cat IS-A Mammal)",
+      "Physical distance",
+      "Antonym relationship"
+    ],
+    "answer": 1,
+    "explanation": "The IS-A relation denotes taxonomic inheritance (a subclass inheriting properties from a superclass, e.g. Cat IS-A Mammal).",
+    "slide_ref": "Week 7, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 71,
+    "week": "Week 7",
+    "topic": "Frame Representation",
+    "question": "A Frame Representation organizes knowledge about an entity using which data structure components?",
+    "options": [
+      "Pointers and addresses",
+      "Slots (attributes) and Values, similar to classes and objects in programming",
+      "Rows and SQL queries",
+      "Input and output neurons"
+    ],
+    "answer": 1,
+    "explanation": "Frames structure information into named slots (attributes) filled with values, closely paralleling classes and attributes in OOP.",
+    "slide_ref": "Week 7, Slide 16",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 72,
+    "week": "Week 7",
+    "topic": "Production Rules",
+    "question": "A Production Rule system consists of which three main parts (Slide 17)?",
+    "options": [
+      "Input layer, Hidden layer, Output layer",
+      "Set of IF-THEN rules, Working memory (current problem state), and Recognize-act cycle",
+      "Initial state, Goal test, Path cost",
+      "Sensors, Actuators, Architecture"
+    ],
+    "answer": 1,
+    "explanation": "Slide 17 defines the 3 parts: Set of rules, Working memory (current state), and the Recognize-Act cycle (checking conditions and firing rules).",
+    "slide_ref": "Week 7, Slide 17",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 73,
+    "week": "Week 7",
+    "topic": "Applications of KRR",
+    "question": "Which of the following is cited in the slides as an application of Knowledge Representation in AI?",
+    "options": [
+      "Expert Systems (e.g. Medical diagnosis systems)",
+      "Natural Language Processing (e.g. Chatbots and translation)",
+      "Semantic Web & Robotics",
+      "All of the above"
+    ],
+    "answer": 3,
+    "explanation": "Slide 18 lists Expert Systems, NLP, Robotics, Semantic Web, and Cognitive Computing as core applications of KRR.",
+    "slide_ref": "Week 7, Slide 18",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 74,
+    "week": "Week 6 & 6.1",
+    "topic": "Graph & Tree Theory",
+    "question": "If an undirected simple graph has 5 vertices, what is the maximum number of edges it can have without multi-edges or loops?",
+    "options": [
+      "4",
+      "5",
+      "10",
+      "20"
+    ],
+    "answer": 2,
+    "explanation": "The maximum number of edges in a simple undirected graph with N vertices is N*(N-1)/2 = 5*4/2 = 10.",
+    "slide_ref": "Week 6, Slide 16",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 75,
+    "week": "Week 6 & 6.1",
+    "topic": "8-Puzzle State Space",
+    "question": "How many total reachable states exist in the standard 8-puzzle game?",
+    "options": [
+      "9",
+      "362,880 (9!)",
+      "181,440 (9! / 2)",
+      "64"
+    ],
+    "answer": 2,
+    "explanation": "There are 9! arrangements of tiles, but exactly half of the permutations are reachable due to parity constraints, giving 9! / 2 = 181,440 states.",
+    "slide_ref": "Week 6, Slide 29",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 76,
+    "week": "Week 5",
+    "topic": "Environment Classification",
+    "question": "Which environment property applies to Chess WITH a clock?",
+    "options": [
+      "Fully observable, Deterministic, Sequential, Semi-dynamic, Discrete, Multi-agent",
+      "Partially observable, Stochastic, Episodic, Dynamic, Continuous, Single agent",
+      "Fully observable, Stochastic, Episodic, Static, Continuous, Multi-agent",
+      "Partially observable, Deterministic, Sequential, Static, Discrete, Single agent"
+    ],
+    "answer": 0,
+    "explanation": "Chess with a clock is Fully Observable (board visible), Deterministic, Sequential, Semi-dynamic (clock runs while thinking), Discrete (board squares/turns), and Multi-agent (2 players).",
+    "slide_ref": "Week 5, Slide 4-15",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 77,
+    "week": "Week 5",
+    "topic": "Environment Classification",
+    "question": "Which environment property applies to Automated Taxi Driving?",
+    "options": [
+      "Partially observable, Stochastic, Sequential, Dynamic, Continuous, Multi-agent",
+      "Fully observable, Deterministic, Episodic, Static, Discrete, Single agent",
+      "Partially observable, Deterministic, Episodic, Dynamic, Discrete, Single agent",
+      "Fully observable, Stochastic, Sequential, Static, Continuous, Multi-agent"
+    ],
+    "answer": 0,
+    "explanation": "Taxi driving is the classic example of the hardest environment: Partially observable (hidden intents, blind spots), Stochastic (traffic/pedestrians), Sequential, Dynamic, Continuous, and Multi-agent.",
+    "slide_ref": "Week 5, Slide 5, 7, 9, 11, 13, 15",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 78,
+    "week": "Week 3",
+    "topic": "Agent Architectures",
+    "question": "Which agent architecture explicitly models 'How the world evolves' and 'What my actions do'?",
+    "options": [
+      "Simple reflex agent",
+      "Model-based reflex agent",
+      "Random reflex agent",
+      "Hardware sensor agent"
+    ],
+    "answer": 1,
+    "explanation": "Model-based reflex agents maintain internal transition models representing how the world evolves independently and how actions affect the world.",
+    "slide_ref": "Week 3, Slide 18",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 79,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "'Computational Intelligence is the study of the design of intelligent agents' is the definition of AI given by:",
+    "options": [
+      "Poole et al. (1998)",
+      "Winston (1992)",
+      "Kurzweil (1990)",
+      "Haugeland (1985)"
+    ],
+    "answer": 0,
+    "explanation": "Slide 17 explicitly credits Poole et al. (1998) for defining AI as: 'Computational Intelligence is the study of the design of intelligent agents' under Systems that act rationally.",
+    "slide_ref": "Week 1, Slide 17",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 80,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "'The study of the computations that make it possible to perceive, reason, and act' is the definition given by:",
+    "options": [
+      "Winston (1992)",
+      "Kurzweil (1990)",
+      "Alan Turing (1950)",
+      "Stuart Russell (2010)"
+    ],
+    "answer": 0,
+    "explanation": "Slide 17 credits Winston (1992) under 'Systems that think rationally'.",
+    "slide_ref": "Week 1, Slide 17",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 81,
+    "week": "Week 2",
+    "topic": "Neural Networks",
+    "question": "What is the role of 'Backpropagation' in Artificial Neural Networks?",
+    "options": [
+      "To capture images from digital cameras",
+      "To propagate errors backwards from the output layer to adjust weights and minimize prediction error",
+      "To translate speech to text in real time",
+      "To convert continuous data into discrete states"
+    ],
+    "answer": 1,
+    "explanation": "Backpropagation computes the error gradient at the output and distributes it backward through network weights to optimize learning.",
+    "slide_ref": "Week 2, Slide 25",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 82,
+    "week": "Week 6 & 6.1",
+    "topic": "Search Evaluation Criteria",
+    "question": "If an algorithm finds the path with the lowest path cost among all possible solutions, the algorithm is:",
+    "options": [
+      "Complete",
+      "Optimal",
+      "Episodic",
+      "Heuristic"
+    ],
+    "answer": 1,
+    "explanation": "Optimality means the search strategy finds the solution with the lowest path cost among all solutions.",
+    "slide_ref": "Week 6, Slide 32",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 83,
+    "week": "Week 6 & 6.1",
+    "topic": "BFS vs DFS",
+    "question": "Given branching factor b = 10, depth d = 3. Approximately how many nodes are generated by BFS at level 3?",
+    "options": [
+      "30",
+      "100",
+      "1,000",
+      "1,110"
+    ],
+    "answer": 2,
+    "explanation": "At depth 3 with b=10, the number of nodes at that level is b^d = 10^3 = 1,000 nodes (and total up to depth 3 is 1 + 10 + 100 + 1000 = 1,111).",
+    "slide_ref": "Week 6, Slide 33",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 84,
+    "week": "Week 7",
+    "topic": "Production Rules",
+    "question": "In a production rule system, what is the 'Recognize-Act cycle'?",
+    "options": [
+      "The physical reboot cycle of a robot",
+      "The process of matching working memory against rule conditions, selecting an applicable rule, and executing its action",
+      "The camera recognition of human faces",
+      "The translation of natural language into audio"
+    ],
+    "answer": 1,
+    "explanation": "Slide 17 describes the Recognize-Act cycle as 'the process of checking conditions and applying rules' against current working memory state.",
+    "slide_ref": "Week 7, Slide 17",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 85,
+    "week": "Week 7",
+    "topic": "Frame Representation",
+    "question": "Which fields commonly utilize Frame Representation according to Slide 16?",
+    "options": [
+      "Natural Language Processing (NLP) and Computer Vision",
+      "Power grid transformers and nuclear cooling",
+      "Operating system CPU scheduling only",
+      "Analog circuit board soldering"
+    ],
+    "answer": 0,
+    "explanation": "Slide 16 highlights: 'Frames are similar to modern classes and objects in programming and are widely used in NLP and computer vision.'",
+    "slide_ref": "Week 7, Slide 16",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 86,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "Which dictionary defined intelligence as: 'The ability to learn, understand and make judgments or have opinions that are based on reason'?",
+    "options": [
+      "Merriam-Webster",
+      "Cambridge Advanced Learner's Dictionary (2006)",
+      "Compact Oxford Dictionary (2006)",
+      "Encyclopaedia Britannica"
+    ],
+    "answer": 1,
+    "explanation": "Slide 14 specifically quotes Cambridge Advanced Learner's Dictionary (2006) for this exact definition.",
+    "slide_ref": "Week 1, Slide 14",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 87,
+    "week": "Week 1",
+    "topic": "Definitions of AI",
+    "question": "Compact Oxford Dictionary (2006) defined intelligence as:",
+    "options": [
+      "The ability to acquire and apply knowledge and skills",
+      "The ability to compute mathematical integrals",
+      "The ability to defeat human grandmasters",
+      "The art of creating machines with literal minds"
+    ],
+    "answer": 0,
+    "explanation": "Slide 14 quotes Compact Oxford Dictionary (2006): 'The ability to acquire and apply knowledge and skills.'",
+    "slide_ref": "Week 1, Slide 14",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 88,
+    "week": "Week 1",
+    "topic": "Textbook Foundations",
+    "question": "Who are the authors of the standard course textbook 'Artificial Intelligence: A Modern Approach' cited in Slide 2?",
+    "options": [
+      "Alan Turing and John von Neumann",
+      "Stuart J. Russell and Peter Norvig",
+      "David L. Poole and Alan K. Mackworth",
+      "George F. Luger and Marvin Minsky"
+    ],
+    "answer": 1,
+    "explanation": "The primary course reference is 'Artificial Intelligence: A Modern Approach' by Stuart J. Russell and Peter Norvig.",
+    "slide_ref": "Week 1, Slide 2 & Week 3, Slide 2",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 89,
+    "week": "Week 1",
+    "topic": "NLP Real World Examples",
+    "question": "In Slide 9, which language translation pair is highlighted as an automated translation example?",
+    "options": [
+      "German to English",
+      "Arabic to English",
+      "Chinese to Russian",
+      "Spanish to French"
+    ],
+    "answer": 1,
+    "explanation": "Slide 9 explicitly gives: 'A computer program automatically translates from Arabic to English.'",
+    "slide_ref": "Week 1, Slide 9",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 90,
+    "week": "Week 2",
+    "topic": "NLP Speech Technologies",
+    "question": "In Natural Language Processing (Slide 15), what do ASR and TTS stand for?",
+    "options": [
+      "Automatic Speech Recognition & Text-to-Speech synthesis",
+      "Automated Syntax Routing & Text-to-Script",
+      "Artificial Semantic Reasoning & Total Turing Simulation",
+      "Applied Statistical Regression & Text Token Segmentation"
+    ],
+    "answer": 0,
+    "explanation": "Slide 15 defines speech technologies: Automatic speech recognition (ASR) and Text-to-speech synthesis (TTS).",
+    "slide_ref": "Week 2, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 91,
+    "week": "Week 2",
+    "topic": "Search Methodologies Applications",
+    "question": "Which of the following are cited in Slide 17 as standard applications of Search Methodologies in AI?",
+    "options": [
+      "Pathfinding in games, scheduling tasks, and optimization problems",
+      "Audio recording and microphone manufacturing",
+      "Operating system disk defragmentation only",
+      "Display monitor pixel manufacturing"
+    ],
+    "answer": 0,
+    "explanation": "Slide 17 lists applications of search: Pathfinding in games, scheduling tasks, and optimization problems.",
+    "slide_ref": "Week 2, Slide 17",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 92,
+    "week": "Week 2",
+    "topic": "Weak AI Examples",
+    "question": "Which of the following is classified as Weak AI (Narrow AI) in Slide 10?",
+    "options": [
+      "ChatGPT and Siri",
+      "Alexa and Recommender Systems",
+      "Self-driving cars",
+      "All of the above"
+    ],
+    "answer": 3,
+    "explanation": "Slide 10 lists ChatGPT, Siri, Alexa, and self-driving cars as practical examples of Weak AI (acting as if intelligent).",
+    "slide_ref": "Week 2, Slide 10",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 93,
+    "week": "Week 3",
+    "topic": "Agent Forms",
+    "question": "Which of the following is categorized as a 'Machine Agent' in Slide 9?",
+    "options": [
+      "Travel agent and insurance agent",
+      "Smart elevator, ATM machine, and delivery drone",
+      "Chatbot and spam filter",
+      "Firewall system and OS scheduler"
+    ],
+    "answer": 1,
+    "explanation": "Slide 9 lists Self-driving car, Industrial robot arm, Delivery drone, Robot vacuum, Smart elevator, ATM machine, etc. as Machine Agents.",
+    "slide_ref": "Week 3, Slide 9",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 94,
+    "week": "Week 3",
+    "topic": "Agent Forms",
+    "question": "Which of the following is classified as a 'Software / Program Agent' in Slide 11?",
+    "options": [
+      "Industrial robot arm",
+      "Chatbots, email spam filters, and trading bots",
+      "Smart elevator and automatic washing machine",
+      "Event coordinator and recruitment agent"
+    ],
+    "answer": 1,
+    "explanation": "Slide 11 explicitly lists Chatbots, email spam filters, trading bots, recommendation systems, fraud detection, and web crawlers as Program/Software Agents.",
+    "slide_ref": "Week 3, Slide 11",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 95,
+    "week": "Week 3",
+    "topic": "Goal-based Agents",
+    "question": "Why are Goal-based Agents also referred to as 'rule-based agents' in Slide 23?",
+    "options": [
+      "Because they can only run on quantum computers",
+      "Because they follow predefined rules to accomplish their goals and take specific actions based on certain conditions",
+      "Because they cannot use sensors",
+      "Because they only operate in games of chess"
+    ],
+    "answer": 1,
+    "explanation": "Slide 23 explains: 'These agents are also known as rule-based agents, as they follow predefined rules to accomplish their goals and take specific actions based on certain conditions.'",
+    "slide_ref": "Week 3, Slide 23",
+    "difficulty": "Medium"
+  },
+  {
+    "id": 96,
+    "week": "Week 5",
+    "topic": "Agent Environment Loop",
+    "question": "In the Agent & Environment interaction model (Slide 3), what does the agent gather from the environment to form a percept sequence?",
+    "options": [
+      "Sensory data via Sensors (e.g., cameras, microphones, APIs)",
+      "Actuator torque commands",
+      "Program code updates",
+      "Direct goal definitions"
+    ],
+    "answer": 0,
+    "explanation": "Sensors gather data from the environment, producing the percept sequence that informs the agent's internal decision engine.",
+    "slide_ref": "Week 5, Slide 3",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 97,
+    "week": "Week 5",
+    "topic": "Static vs Dynamic",
+    "question": "Why is playing football (soccer) a Dynamic environment for an agent?",
+    "options": [
+      "Because the score is fixed",
+      "Because the other players and ball continuously move and the world changes while the agent is deliberating",
+      "Because football has only one rule",
+      "Because the field is discrete"
+    ],
+    "answer": 1,
+    "explanation": "In dynamic environments like football or taxi driving, the environment evolves while the agent decides what to do next.",
+    "slide_ref": "Week 5, Slide 11",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 98,
+    "week": "Week 5",
+    "topic": "Discrete vs Continuous",
+    "question": "Which of the following task environments is best described as 'Continuous'?",
+    "options": [
+      "Chess",
+      "8-puzzle",
+      "Autonomous drone flight / Automated taxi driving",
+      "Tic-tac-toe"
+    ],
+    "answer": 2,
+    "explanation": "Drone navigation and taxi driving feature continuously changing speeds, angles, locations, and time values.",
+    "slide_ref": "Week 5, Slide 13",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 99,
+    "week": "Week 6 & 6.1",
+    "topic": "Graph Definitions",
+    "question": "What is a 'Loop' in graph theory according to Slide 15?",
+    "options": [
+      "A cycle of at least 5 vertices",
+      "An edge connecting a vertex to itself, represented as {u, u} = {u}",
+      "A vertex that has zero in-degree",
+      "An algorithm that never halts"
+    ],
+    "answer": 1,
+    "explanation": "Slide 15 defines a loop as: 'An edge from a vertex to itself. Represented as {u, u} = {u}'.",
+    "slide_ref": "Week 6, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 100,
+    "week": "Week 6 & 6.1",
+    "topic": "Trees vs Graphs",
+    "question": "If a tree has 10 vertices, how many edges does it contain?",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "20"
+    ],
+    "answer": 0,
+    "explanation": "Slide 24 states: 'For N vertices, there are N-1 edges'. Thus for 10 vertices, there are exactly 9 edges.",
+    "slide_ref": "Week 6, Slide 24",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 101,
+    "week": "Week 6 & 6.1",
+    "topic": "Problem-Solving vs Planning Agents",
+    "question": "What is the key difference between Problem-Solving agents and Planning agents in Slide 11?",
+    "options": [
+      "Problem-solving agents search for a path step-by-step using atomic representations; planning agents reason abstractly with constraints and actions",
+      "Problem-solving agents only use DFS while planning agents only use BFS",
+      "Problem-solving agents have no goals",
+      "Planning agents cannot execute actions"
+    ],
+    "answer": 0,
+    "explanation": "Slide 11 highlights: 'Problem-solving agents: Search for a path step by step. Planning agents: Reason abstractly, considering actions, constraints, and goals.'",
+    "slide_ref": "Week 6, Slide 11",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 102,
+    "week": "Week 6 & 6.1",
+    "topic": "Vacuum World Problem Actions",
+    "question": "In the standard 2-room vacuum cleaner problem, what are the available actions (Slide 27)?",
+    "options": [
+      "Right, Left, Clean (Suck)",
+      "Up, Down, Jump, Fly",
+      "Reboot, Delete, Format",
+      "Forward propagation, Backpropagation"
+    ],
+    "answer": 0,
+    "explanation": "Slide 27 defines the actions for the vacuum cleaner world: right, left, clean (suck).",
+    "slide_ref": "Week 6, Slide 27",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 103,
+    "week": "Week 6 & 6.1",
+    "topic": "BFS Memory Bottleneck Example",
+    "question": "In Slide 35, assuming branching factor b = 10, processing 1 million nodes/sec, and 1000 bytes/node, what makes BFS impractical for deep search trees?",
+    "options": [
+      "BFS loses track of the root",
+      "BFS memory requirements grow exponentially (e.g. Gigabytes to Terabytes) before time becomes the limiting factor",
+      "BFS cannot find the shortest path",
+      "BFS is not supported in modern programming languages"
+    ],
+    "answer": 1,
+    "explanation": "Slide 35 illustrates that memory exhaustion (space complexity O(b^d)) is a far more immediate hurdle than execution speed.",
+    "slide_ref": "Week 6, Slide 35",
+    "difficulty": "Hard"
+  },
+  {
+    "id": 104,
+    "week": "Week 7",
+    "topic": "Knowledge Representation Importance",
+    "question": "According to Slide 12, can an AI agent display intelligent behaviour without knowledge or prior experience?",
+    "options": [
+      "Yes, AI can always guess correctly at random",
+      "No, without knowledge, an AI system cannot display intelligent behaviour or understand inputs properly",
+      "Yes, if it has a GPU with 80GB VRAM",
+      "Yes, because sensors replace knowledge completely"
+    ],
+    "answer": 1,
+    "explanation": "Slide 12 states: 'Without knowledge, an AI system cannot display intelligent behaviour. An agent can respond correctly only if it has knowledge or prior experience.'",
+    "slide_ref": "Week 7, Slide 12",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 105,
+    "week": "Week 7",
+    "topic": "Semantic Networks",
+    "question": "Which relation in a Semantic Network indicates category relationships (Slide 15)?",
+    "options": [
+      "Kind-of relation",
+      "Syntax relation",
+      "State transition relation",
+      "Percept history relation"
+    ],
+    "answer": 0,
+    "explanation": "Slide 15 highlights: 'IS-A relation: Shows inheritance (e.g. Cat is a Mammal). Kind-of relation: Shows category relationships.'",
+    "slide_ref": "Week 7, Slide 15",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 106,
+    "week": "Week 7",
+    "topic": "Frame Representation Example",
+    "question": "In Slide 16, what slots are used in the example Frame for a 'Book'?",
+    "options": [
+      "Title, Author, Year, Pages",
+      "Sensors, Actuators, Environment, Performance",
+      "Nodes, Arcs, Weight, Directed",
+      "Initial state, Goal, Path cost, Transition"
+    ],
+    "answer": 0,
+    "explanation": "Slide 16 gives the explicit example: 'A frame for a Book may include slots such as title, author, year and pages.'",
+    "slide_ref": "Week 7, Slide 16",
+    "difficulty": "Easy"
+  },
+  {
+    "id": 107,
+    "week": "Week 7",
+    "topic": "KRR Applications",
+    "question": "Which application of KRR allows machines to understand and organize web information across topics (Slide 18)?",
+    "options": [
+      "Semantic Web",
+      "PackBot",
+      "Depth First Search",
+      "Automated Taxi Meter"
+    ],
+    "answer": 0,
+    "explanation": "Slide 18 notes: 'Semantic Web: Allows machines to understand and organize web information. Example: Search engines understanding relationships between topics.'",
+    "slide_ref": "Week 7, Slide 18",
+    "difficulty": "Easy"
+  }
+];
+
+    const FLASHCARDS = [
+      {
+        category: "AI Foundations",
+        front: "What is an Agent?",
+        back: "An entity that perceives its environment through sensors and acts upon that environment through actuators. (Agent = Architecture + Program)",
+        slide: "Week 3, Slide 4-5"
+      },
+      {
+        category: "Agent Types",
+        front: "What is a Simple Reflex Agent?",
+        back: "An agent that selects actions based only on the CURRENT percept using condition-action rules (IF-THEN). It has NO memory/state. Example: Interactive Voice Response (IVR).",
+        slide: "Week 3, Slide 15-16"
+      },
+      {
+        category: "Agent Types",
+        front: "What is a Model-based Reflex Agent?",
+        back: "An agent that maintains an INTERNAL STATE to track unobservable aspects of the environment. Operates in 4 stages: Sense -> Model -> Reason -> Act. Example: Amazon Bedrock.",
+        slide: "Week 3, Slide 18-20"
+      },
+      {
+        category: "Agent Types",
+        front: "What is a Goal-based Agent?",
+        back: "An agent that combines current state knowledge with explicit GOAL descriptions, using search and planning algorithms to choose actions that achieve the goal.",
+        slide: "Week 3, Slide 23-25"
+      },
+      {
+        category: "Agent Types",
+        front: "What is a Utility-based Agent?",
+        back: "An agent that chooses actions to maximize a UTILITY FUNCTION (a numerical measure of desirability or happiness). Used to resolve trade-offs among conflicting goals.",
+        slide: "Week 3, Slide 27-28"
+      },
+      {
+        category: "Environments",
+        front: "Fully Observable vs Partially Observable",
+        back: "Fully Observable: Sensors give complete access to world state at any time (Chess). Partially Observable: Hidden details or noisy sensors (Taxi driving, Vacuum with only local dirt sensor).",
+        slide: "Week 5, Slide 5"
+      },
+      {
+        category: "Environments",
+        front: "Deterministic vs Stochastic",
+        back: "Deterministic: Next state is 100% determined by current state and agent action (Vacuum world). Stochastic: Next state involves unpredictable elements (Taxi driving due to traffic).",
+        slide: "Week 5, Slide 7"
+      },
+      {
+        category: "Environments",
+        front: "Episodic vs Sequential",
+        back: "Episodic: Experience divided into independent atomic episodes; current action does NOT affect future decisions (Mail sorting). Sequential: Current action affects all future states (Chess, Taxi).",
+        slide: "Week 5, Slide 9"
+      },
+      {
+        category: "Environments",
+        front: "Static vs Dynamic",
+        back: "Static: Environment does NOT change while agent is deliberating (Crossword). Dynamic: Environment changes while agent is thinking (Taxi, Football).",
+        slide: "Week 5, Slide 11"
+      },
+      {
+        category: "PEAS",
+        front: "What does PEAS stand for?",
+        back: "P: Performance Measure\nE: Environment\nA: Actuators\nS: Sensors",
+        slide: "Week 6, Slide 3"
+      },
+      {
+        category: "PEAS",
+        front: "PEAS for Automated Taxi Driver",
+        back: "P: Safe, fast, legal, comfortable, max profit\nE: Roads, traffic, pedestrians, weather\nA: Steering, accelerator, brake, signals, horn\nS: Cameras, sonar, lidar, GPS, speedometer",
+        slide: "Week 6, Slide 6 & 6.1, Slide 11"
+      },
+      {
+        category: "Search",
+        front: "In-Degree vs Out-Degree in a Directed Graph",
+        back: "In-degree(x): Number of directed edges entering x.\nOut-degree(x): Number of directed edges leaving x.\nSlide problem: V={u,v,w}, E={(u,w),(u,v),(v,w)} -> u:Out=2,In=0; v:Out=1,In=1; w:Out=0,In=2.",
+        slide: "Week 6, Slides 18-22"
+      },
+      {
+        category: "Search",
+        front: "Tree Properties (with N vertices)",
+        back: "A Tree is a connected, acyclic hierarchical graph. For N vertices, there are exactly N - 1 edges!",
+        slide: "Week 6, Slide 24"
+      },
+      {
+        category: "Search",
+        front: "Breadth-First Search (BFS) Properties",
+        back: "Data Structure: FIFO Queue.\nCompleteness: Yes (if b finite).\nOptimality: Yes (if uniform step cost).\nTime: O(b^d).\nSpace: O(b^d) (Huge memory bottleneck!).",
+        slide: "Week 6, Slide 33"
+      },
+      {
+        category: "Search",
+        front: "Depth-First Search (DFS) Properties",
+        back: "Data Structure: LIFO Stack.\nCompleteness: No (fails in loops/infinite paths).\nOptimality: No.\nTime: O(b^m).\nSpace: O(bm) (Modest linear memory is its huge advantage!).",
+        slide: "Week 6, Slide 37"
+      },
+      {
+        category: "Knowledge",
+        front: "Declarative vs Procedural Knowledge",
+        back: "Declarative: Facts and concepts; answers 'WHAT' something is ('Paris is capital of France').\nProcedural: Rules on 'HOW' to perform a task (Steps of a sorting algorithm).",
+        slide: "Week 7, Slide 7-8"
+      },
+      {
+        category: "Knowledge",
+        front: "Meta-Knowledge and Heuristic Knowledge",
+        back: "Meta-Knowledge: Knowledge about other knowledge (which rule works best).\nHeuristic Knowledge: Experience-based rules of thumb used by experts (doctor's clinical hunch).",
+        slide: "Week 7, Slide 9-10"
+      },
+      {
+        category: "Knowledge",
+        front: "4 Knowledge Representation Techniques",
+        back: "1. Logical Representation (Syntax & Semantics)\n2. Semantic Networks (Nodes, Arcs, IS-A)\n3. Frame Representation (Slots & Values)\n4. Production Rules (IF-THEN, Working Memory, Recognize-Act)",
+        slide: "Week 7, Slide 13-17"
+      },
+      {
+        category: "Generative vs Agentic",
+        front: "Generative AI vs Agentic AI",
+        back: "Generative AI: Creates new content (text/images/audio) from prompts (creates lecture slides).\nAgentic AI: Autonomous, goal-driven, takes multi-step actions with tools (designs course, teaches, evaluates students).",
+        slide: "Week 2, Slide 7-9"
+      },
+      {
+        category: "AI Foundations",
+        front: "Turing Test (1950) & Alan Turing",
+        back: "Imitation Game: Human judge talks to human and machine over text channel. 1950 prediction: By 2000, 30% chance of fooling lay person for 5 minutes. Needs NLP, KR, Automated Reasoning, ML.",
+        slide: "Week 1, Slide 19-22"
+      }
+    ];
+
+    // Global App State
+    let currentWeekFilter = 'All';
+    let searchQuery = '';
+    let userAnswers = {};
+    let bookmarkedIds = new Set();
+    let audioEnabled = true;
+
+    // Exam Simulator State
+    let examActive = false;
+    let examQuestions = [];
+    let currentExamIdx = 0;
+    let examUserAnswers = {};
+    let examFlagged = new Set();
+    let examTimerInterval = null;
+    let examSecondsRemaining = 25 * 60;
+
+    // Flashcard State
+    let currentFlashcards = [...FLASHCARDS];
+    let currentFcIdx = 0;
+
+    // Audio synthesizer
+    function playBeep(type) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        const now = ctx.currentTime;
+
+        if (type === 'correct') {
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.08);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'wrong') {
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(180, now + 0.08);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'click') {
+          osc.frequency.setValueAtTime(400, now);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      } catch (e) {}
+    }
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      playBeep('click');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+
+      const targetSection = document.getElementById('view-' + tabId);
+      if (targetSection) targetSection.classList.add('active');
+
+      const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabId === 'flashcards') {
+        renderFlashcard();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Theme toggle
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      document.getElementById('theme-icon').textContent = next === 'dark' ? '🌙' : '☀️';
+      playBeep('click');
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('sound-icon').textContent = audioEnabled ? '🔊' : '🔇';
+    }
+
+    // ==========================================
+    // MCQ RENDER & INTERACTION
+    // ==========================================
+    function renderMCQs() {
+      const container = document.getElementById('mcq-list-container');
+      const filtered = ALL_QUESTIONS.filter(q => {
+        const matchesWeek = (currentWeekFilter === 'All') ||
+                            (currentWeekFilter === 'Saved' && bookmarkedIds.has(q.id)) ||
+                            (q.week === currentWeekFilter);
+        const matchesSearch = !searchQuery ||
+                              q.question.toLowerCase().includes(searchQuery) ||
+                              q.topic.toLowerCase().includes(searchQuery) ||
+                              q.options.some(opt => opt.toLowerCase().includes(searchQuery));
+        return matchesWeek && matchesSearch;
+      });
+
+      document.getElementById('displayed-mcq-count').textContent = filtered.length;
+      document.getElementById('practiced-count').textContent = Object.keys(userAnswers).length;
+      document.getElementById('saved-count').textContent = bookmarkedIds.size;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="text-align:center; padding:3rem 1rem;">
+            <p style="font-size:1.2rem; color:var(--text-muted);">No questions found matching your criteria.</p>
+            <button class="btn btn-secondary" style="margin-top:1rem;" onclick="resetFilters()">Clear Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      const letters = ['A', 'B', 'C', 'D'];
+      let html = '';
+
+      filtered.forEach((q, idx) => {
+        const isAnswered = userAnswers[q.id] !== undefined;
+        const selectedIdx = userAnswers[q.id];
+        const isBookmarked = bookmarkedIds.has(q.id);
+
+        let diffBadge = 'badge-diff-med';
+        if (q.difficulty === 'Easy') diffBadge = 'badge-diff-easy';
+        if (q.difficulty === 'Hard') diffBadge = 'badge-diff-hard';
+
+        html += `
+          <div class="mcq-card" id="qcard-${q.id}">
+            <div class="mcq-meta">
+              <div class="mcq-tags">
+                <span class="tag-badge badge-week">${q.week}</span>
+                <span class="tag-badge ${diffBadge}">${q.difficulty}</span>
+                <span style="font-weight:600; color:var(--text-muted);">${q.topic}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span style="font-size:0.75rem; color:var(--text-muted);">${q.slide_ref}</span>
+                <button onclick="toggleBookmark(${q.id})" style="background:none; border:none; cursor:pointer; font-size:1.1rem;" title="Save Question">
+                  ${isBookmarked ? '⭐' : '☆'}
+                </button>
+              </div>
+            </div>
+
+            <div class="mcq-text">
+              <span style="color:var(--accent); font-weight:700; margin-right:4px;">Q${q.id}.</span> ${q.question}
+            </div>
+
+            <div class="options-grid">
+              ${q.options.map((opt, optIdx) => {
+                let btnClass = 'option-btn';
+                if (isAnswered) {
+                  if (optIdx === q.answer) {
+                    btnClass += (selectedIdx === q.answer) ? ' selected-correct' : ' reveal-correct';
+                  } else if (optIdx === selectedIdx) {
+                    btnClass += ' selected-wrong';
+                  }
+                }
+                const disabled = isAnswered ? 'disabled' : '';
+                return `
+                  <button class="${btnClass}" ${disabled} onclick="selectPracticeAnswer(${q.id}, ${optIdx})">
+                    <span class="option-letter">${letters[optIdx]}</span>
+                    <span>${opt}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="mcq-explanation ${isAnswered ? 'show' : ''}" id="expl-${q.id}">
+              <div class="explanation-title">
+                ${isAnswered && selectedIdx === q.answer ? '✅ Correct!' : '❌ Explanation & Core Slide Concept:'}
+              </div>
+              <p>${q.explanation}</p>
+              <div class="explanation-source">📖 Source: ${q.slide_ref}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function selectPracticeAnswer(qId, selectedIdx) {
+      if (userAnswers[qId] !== undefined) return;
+      userAnswers[qId] = selectedIdx;
+
+      const q = ALL_QUESTIONS.find(item => item.id === qId);
+      if (selectedIdx === q.answer) {
+        playBeep('correct');
+      } else {
+        playBeep('wrong');
+      }
+      renderMCQs();
+    }
+
+    function toggleBookmark(qId) {
+      playBeep('click');
+      if (bookmarkedIds.has(qId)) {
+        bookmarkedIds.delete(qId);
+      } else {
+        bookmarkedIds.add(qId);
+      }
+      renderMCQs();
+    }
+
+    function filterByWeek(week) {
+      playBeep('click');
+      currentWeekFilter = week;
+      document.querySelectorAll('#week-filters .chip').forEach(c => c.classList.remove('active'));
+      const activeChip = Array.from(document.querySelectorAll('#week-filters .chip')).find(c => c.textContent.includes(week));
+      if (activeChip) activeChip.classList.add('active');
+      renderMCQs();
+    }
+
+    function filterByBookmarked() {
+      playBeep('click');
+      currentWeekFilter = 'Saved';
+      document.querySelectorAll('#week-filters .chip').forEach(c => c.classList.remove('active'));
+      const savedChip = Array.from(document.querySelectorAll('#week-filters .chip')).find(c => c.textContent.includes('Saved'));
+      if (savedChip) savedChip.classList.add('active');
+      renderMCQs();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('search-mcq').value.trim().toLowerCase();
+      renderMCQs();
+    }
+
+    function resetFilters() {
+      currentWeekFilter = 'All';
+      searchQuery = '';
+      document.getElementById('search-mcq').value = '';
+      filterByWeek('All');
+    }
+
+    function resetPracticeProgress() {
+      if (confirm('Reset all your answered questions so you can practice again?')) {
+        userAnswers = {};
+        renderMCQs();
+      }
+    }
+
+    // ==========================================
+    // EXAM SIMULATOR ENGINE
+    // ==========================================
+    function startFastMockExam() {
+      switchTab('simulator');
+      const shuffled = [...ALL_QUESTIONS].sort(() => 0.5 - Math.random());
+      examQuestions = shuffled.slice(0, 25);
+      examUserAnswers = {};
+      examFlagged = new Set();
+      currentExamIdx = 0;
+      examSecondsRemaining = 25 * 60;
+      examActive = true;
+
+      if (examTimerInterval) clearInterval(examTimerInterval);
+      examTimerInterval = setInterval(updateExamTimer, 1000);
+
+      renderExamUI();
+    }
+
+    function updateExamTimer() {
+      if (!examActive) return;
+      if (examSecondsRemaining <= 0) {
+        clearInterval(examTimerInterval);
+        submitExam();
+        alert('Time is up! Submitting your exam paper.');
+        return;
+      }
+      examSecondsRemaining--;
+      const mins = Math.floor(examSecondsRemaining / 60);
+      const secs = examSecondsRemaining % 60;
+      document.getElementById('exam-timer-display').textContent =
+        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function renderExamUI() {
+      if (examQuestions.length === 0) return;
+      const q = examQuestions[currentExamIdx];
+      const letters = ['A', 'B', 'C', 'D'];
+
+      const palette = document.getElementById('sim-palette');
+      palette.innerHTML = examQuestions.map((item, idx) => {
+        let cls = 'palette-btn';
+        if (idx === currentExamIdx) cls += ' current';
+        if (examUserAnswers[idx] !== undefined) cls += ' answered';
+        if (examFlagged.has(idx)) cls += ' flagged';
+        return `<button class="${cls}" onclick="jumpToExamQuestion(${idx})">${idx + 1}</button>`;
+      }).join('');
+
+      const answeredCount = Object.keys(examUserAnswers).length;
+      const pct = Math.round((answeredCount / examQuestions.length) * 100);
+      document.getElementById('sim-progress-fill').style.width = pct + '%';
+
+      const box = document.getElementById('sim-question-box');
+      box.innerHTML = `
+        <div class="card" style="margin-top:1rem;">
+          <div class="mcq-meta">
+            <div>
+              <span class="tag-badge badge-week">${q.week}</span>
+              <strong style="margin-left:0.5rem; color:var(--text-main);">Question ${currentExamIdx + 1} of ${examQuestions.length}</strong>
+            </div>
+            <span style="font-size:0.8rem; color:var(--text-muted);">${q.topic}</span>
+          </div>
+
+          <div class="mcq-text" style="font-size:1.15rem; margin:1rem 0;">
+            ${q.question}
+          </div>
+
+          <div class="options-grid">
+            ${q.options.map((opt, optIdx) => {
+              const isSelected = examUserAnswers[currentExamIdx] === optIdx;
+              const btnClass = 'option-btn' + (isSelected ? ' selected-correct' : '');
+              return `
+                <button class="${btnClass}" onclick="selectExamAnswer(${optIdx})">
+                  <span class="option-letter">${letters[optIdx]}</span>
+                  <span>${opt}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function selectExamAnswer(optIdx) {
+      playBeep('click');
+      examUserAnswers[currentExamIdx] = optIdx;
+      renderExamUI();
+    }
+
+    function prevExamQuestion() {
+      if (currentExamIdx > 0) {
+        currentExamIdx--;
+        playBeep('click');
+        renderExamUI();
+      }
+    }
+
+    function nextExamQuestion() {
+      if (currentExamIdx < examQuestions.length - 1) {
+        currentExamIdx++;
+        playBeep('click');
+        renderExamUI();
+      }
+    }
+
+    function jumpToExamQuestion(idx) {
+      currentExamIdx = idx;
+      playBeep('click');
+      renderExamUI();
+    }
+
+    function toggleFlagCurrentExamQuestion() {
+      playBeep('click');
+      if (examFlagged.has(currentExamIdx)) {
+        examFlagged.delete(currentExamIdx);
+      } else {
+        examFlagged.add(currentExamIdx);
+      }
+      renderExamUI();
+    }
+
+    function submitExam() {
+      examActive = false;
+      if (examTimerInterval) clearInterval(examTimerInterval);
+
+      let correct = 0;
+      examQuestions.forEach((q, idx) => {
+        if (examUserAnswers[idx] === q.answer) {
+          correct++;
+        }
+      });
+
+      const total = examQuestions.length;
+      const pct = Math.round((correct / total) * 100);
+      const passed = pct >= 50;
+
+      document.getElementById('modal-score-number').textContent = pct + '%';
+      document.getElementById('modal-score-fraction').textContent = `${correct} / ${total} Correct`;
+      document.getElementById('modal-score-circle').style.setProperty('--percent', pct);
+
+      const statusElem = document.getElementById('modal-exam-status');
+      if (passed) {
+        statusElem.textContent = 'PASSED (Exam Ready!) 🌟';
+        statusElem.style.color = 'var(--success)';
+        playBeep('correct');
+      } else {
+        statusElem.textContent = 'NEEDS REVISION (Review Slides) ⚠️';
+        statusElem.style.color = 'var(--danger)';
+        playBeep('wrong');
+      }
+
+      const elapsedSec = (25 * 60) - examSecondsRemaining;
+      const elM = Math.floor(elapsedSec / 60);
+      const elS = elapsedSec % 60;
+      document.getElementById('modal-exam-time').textContent = `${elM}m ${elS}s`;
+      document.getElementById('modal-exam-acc').textContent = `${pct}%`;
+
+      document.getElementById('score-modal').classList.add('open');
+    }
+
+    function closeScoreModal() {
+      document.getElementById('score-modal').classList.remove('open');
+      renderExamReview();
+    }
+
+    function renderExamReview() {
+      const box = document.getElementById('sim-question-box');
+      const letters = ['A', 'B', 'C', 'D'];
+      let reviewHtml = `
+        <div class="card">
+          <h3 style="color:var(--accent); margin-bottom:1rem;">Exam Paper Review & Corrections</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Review each question below with detailed explanations from your course slides.</p>
+      `;
+
+      examQuestions.forEach((q, idx) => {
+        const userChoice = examUserAnswers[idx];
+        const isCorrect = userChoice === q.answer;
+
+        reviewHtml += `
+          <div style="border-bottom:1px solid var(--border); padding:1rem 0;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+              <strong>Question ${idx + 1} (${q.week})</strong>
+              <span style="font-weight:700; color:${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                ${isCorrect ? '✅ Correct (+1)' : '❌ Incorrect'}
+              </span>
+            </div>
+            <p style="font-weight:600; margin-bottom:0.75rem;">${q.question}</p>
+            <div style="margin-left:1rem; font-size:0.9rem;">
+              ${q.options.map((opt, optIdx) => {
+                let prefix = letters[optIdx] + ') ';
+                let style = 'padding:0.25rem 0.5rem; margin:0.2rem 0; border-radius:4px;';
+                if (optIdx === q.answer) {
+                  style += 'background:var(--success-bg); color:var(--success); font-weight:700;';
+                  prefix = '✅ ' + prefix;
+                } else if (optIdx === userChoice) {
+                  style += 'background:var(--danger-bg); color:var(--danger); font-weight:700;';
+                  prefix = '❌ ' + prefix;
+                }
+                return `<div style="${style}">${prefix} ${opt}</div>`;
+              }).join('')}
+            </div>
+            <div class="tip-box" style="margin-top:0.75rem;">
+              <strong>Concept Explanation:</strong> ${q.explanation}<br>
+              <small style="color:var(--text-muted);">Source: ${q.slide_ref}</small>
+            </div>
+          </div>
+        `;
+      });
+
+      reviewHtml += `</div>`;
+      box.innerHTML = reviewHtml;
+    }
+
+    // ==========================================
+    // FLASHCARD LOGIC
+    // ==========================================
+    function renderFlashcard() {
+      if (currentFlashcards.length === 0) return;
+      const card = currentFlashcards[currentFcIdx];
+      const fcElem = document.getElementById('flashcard');
+      fcElem.classList.remove('flipped');
+
+      document.getElementById('fc-category').textContent = card.category;
+      document.getElementById('fc-front').textContent = card.front;
+      document.getElementById('fc-back').textContent = card.back;
+      document.getElementById('fc-slide-ref').textContent = 'Source: ' + card.slide;
+
+      document.getElementById('fc-index').textContent = currentFcIdx + 1;
+      document.getElementById('fc-total').textContent = currentFlashcards.length;
+    }
+
+    function flipCard() {
+      playBeep('click');
+      document.getElementById('flashcard').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+      playBeep('click');
+      if (currentFcIdx < currentFlashcards.length - 1) {
+        currentFcIdx++;
+        renderFlashcard();
+      }
+    }
+
+    function prevCard() {
+      playBeep('click');
+      if (currentFcIdx > 0) {
+        currentFcIdx--;
+        renderFlashcard();
+      }
+    }
+
+    function filterFlashcards(cat) {
+      playBeep('click');
+      document.querySelectorAll('#flashcard-category-chips .chip').forEach(c => c.classList.remove('active'));
+      const activeChip = Array.from(document.querySelectorAll('#flashcard-category-chips .chip')).find(c => c.textContent.includes(cat));
+      if (activeChip) activeChip.classList.add('active');
+
+      if (cat === 'All') {
+        currentFlashcards = [...FLASHCARDS];
+      } else {
+        currentFlashcards = FLASHCARDS.filter(c => c.category === cat);
+      }
+      currentFcIdx = 0;
+      renderFlashcard();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const activeSection = document.querySelector('.view-section.active');
+      if (activeSection && activeSection.id === 'view-flashcards') {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          flipCard();
+        } else if (e.code === 'ArrowRight') {
+          nextCard();
+        } else if (e.code === 'ArrowLeft') {
+          prevCard();
+        }
+      }
+    });
+
+    // ==========================================
+    // NOTES ACCORDION
+    // ==========================================
+    function toggleAccordion(headerElem) {
+      playBeep('click');
+      const content = headerElem.nextElementSibling;
+      content.classList.toggle('open');
+      const icon = headerElem.querySelector('span:last-child');
+      icon.textContent = content.classList.contains('open') ? '▲' : '▼';
+    }
+
+    // ==========================================
+    // INTERACTIVE LAB (ENV QUIZ)
+    // ==========================================
+    const ENV_DATA = {
+      taxi: {
+        title: "Automated Taxi Driver",
+        obs: "Partially Observable",
+        obsWhy: "Cannot see what other drivers think, blind spots, weather.",
+        det: "Stochastic",
+        detWhy: "Traffic and pedestrians behave unpredictably.",
+        epi: "Sequential",
+        epiWhy: "Every turn or braking decision impacts future situations.",
+        dyn: "Dynamic",
+        dynWhy: "Road condition and other traffic change continuously while agent deliberates.",
+        dis: "Continuous",
+        disWhy: "Speed, steering angle, and coordinates flow smoothly.",
+        agn: "Multi-Agent",
+        agnWhy: "Interacts with pedestrian agents and other human/vehicle drivers."
+      },
+      chess: {
+        title: "Chess with a Clock",
+        obs: "Fully Observable",
+        obsWhy: "The entire board and all pieces are completely visible.",
+        det: "Deterministic",
+        detWhy: "Next state is strictly determined by piece move rules without dice.",
+        epi: "Sequential",
+        epiWhy: "Current move determines future possibilities and king safety.",
+        dyn: "Semi-Dynamic",
+        dynWhy: "Board pieces do not change while thinking, but player's clock time ticks down.",
+        dis: "Discrete",
+        disWhy: "Fixed 64 squares, discrete piece moves.",
+        agn: "Multi-Agent (Competitive)",
+        agnWhy: "Two opposing agents competing to checkmate."
+      },
+      mail: {
+        title: "Mail Sorting System",
+        obs: "Fully Observable",
+        obsWhy: "Barcode or postal address scanner reads full destination code.",
+        det: "Deterministic",
+        detWhy: "Sorting conveyor routes letter to predefined bin with no randomness.",
+        epi: "Episodic",
+        epiWhy: "Sorting envelope 1 has zero effect on envelope 2.",
+        dyn: "Static",
+        dynWhy: "Address on letter does not change while being scanned.",
+        dis: "Discrete",
+        disWhy: "Fixed zip codes and distinct destination bins.",
+        agn: "Single Agent",
+        agnWhy: "System acts alone without competitor interference."
+      },
+      crossword: {
+        title: "Crossword Puzzle",
+        obs: "Fully Observable",
+        obsWhy: "All clues and grid squares are visible.",
+        det: "Deterministic",
+        detWhy: "Filling a word deterministically fixes letters in intersecting squares.",
+        epi: "Sequential",
+        epiWhy: "Writing word 1 constrains valid letters for intersecting words.",
+        dyn: "Static",
+        dynWhy: "Puzzle letters do not change while deliberating on a clue.",
+        dis: "Discrete",
+        disWhy: "Fixed letter characters and finite grid squares.",
+        agn: "Single Agent",
+        agnWhy: "Player solves puzzle alone."
+      }
+    };
+
+    function loadEnvQuiz(key) {
+      playBeep('click');
+      document.querySelectorAll('#view-interactive .btn-secondary').forEach(b => b.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('#view-interactive .btn-secondary')).find(b => b.getAttribute('onclick').includes(key));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const data = ENV_DATA[key];
+      const box = document.getElementById('env-quiz-card');
+      box.innerHTML = `
+        <h3 style="color:var(--accent); margin-bottom:0.75rem;">${data.title} - Environment Profile</h3>
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Classification</th>
+              <th>Justification from Slides</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Observability</strong></td>
+              <td><span style="color:var(--accent); font-weight:700;">${data.obs}</span></td>
+              <td>${data.obsWhy}</td>
+            </tr>
+            <tr>
+              <td><strong>2. Determinism</strong></td>
+              <td><span style="color:var(--warning); font-weight:700;">${data.det}</span></td>
+              <td>${data.detWhy}</td>
+            </tr>
+            <tr>
+              <td><strong>3. Episodic vs Sequential</strong></td>
+              <td><span style="color:var(--success); font-weight:700;">${data.epi}</span></td>
+              <td>${data.epiWhy}</td>
+            </tr>
+            <tr>
+              <td><strong>4. Static vs Dynamic</strong></td>
+              <td><span style="color:#f472b6; font-weight:700;">${data.dyn}</span></td>
+              <td>${data.dynWhy}</td>
+            </tr>
+            <tr>
+              <td><strong>5. Continuity</strong></td>
+              <td><span style="color:#a78bfa; font-weight:700;">${data.dis}</span></td>
+              <td>${data.disWhy}</td>
+            </tr>
+            <tr>
+              <td><strong>6. Single vs Multi-Agent</strong></td>
+              <td><span style="color:#38bdf8; font-weight:700;">${data.agn}</span></td>
+              <td>${data.agnWhy}</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('total-mcq-count').textContent = ALL_QUESTIONS.length;
+      document.getElementById('all-count').textContent = ALL_QUESTIONS.length;
+      document.getElementById('total-flashcard-count').textContent = FLASHCARDS.length;
+      document.getElementById('fc-all-count').textContent = FLASHCARDS.length;
+
+      renderMCQs();
+      renderFlashcard();
+      loadEnvQuiz('taxi');
+    });
+  </script>
+</body>
+</html>
