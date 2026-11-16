@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "echo 'Ready'"
+    "build": "node -e \"console.log('Build completed successfully')\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "keywords": ["ai", "exam", "education", "mcqs"],
   "author": "Dad Mohammad",

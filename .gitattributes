@@ -1,0 +1,10 @@
+# Treat all text files as text and normalize line endings
+* text=auto
+
+# Treat binaries as binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
